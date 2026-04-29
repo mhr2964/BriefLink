@@ -1,150 +1,220 @@
 {
   "dashboardId": "brieflink-core-loop",
   "title": "BriefLink Core Loop Ops Dashboard",
-  "version": "1.0",
-  "lastUpdated": "2026-04-29T21:17:35.547Z",
+  "version": "1.4",
+  "lastUpdated": "2026-04-29T21:21:20.000Z",
   "freshness": {
     "status": "manual-update-required",
-    "updatedAt": "2026-04-29T21:17:35.547Z",
+    "updatedAt": "2026-04-29T21:21:20.000Z",
     "source": "manual",
     "owner": "vizops",
-    "cadence": "Update when prototype parity changes, new funnel counts are known, or open UX/content decisions move.",
-    "staleAfterHours": 24
+    "cadence": "Update when funnel semantics, parity status, or manual counts change.",
+    "staleAfterHours": 24,
+    "confidenceRule": "Funnel semantics are locked by CEO decision. Prototype parity and downstream metrics may still depend on manual assumptions until instrumentation exists."
   },
   "summary": {
-    "focus": "Track the first active BriefLink funnel from prototype parity through sharing and recipient open behavior.",
-    "sourceOfTruth": "Manual operating inputs until product instrumentation is live.",
-    "currentPhase": "prototype-parity-and-manual-funnel-tracking"
+    "focus": "Track the approved BriefLink funnel from visit to account conversion.",
+    "sourceOfTruth": "CEO-approved funnel semantics with manual operating inputs until instrumentation is live.",
+    "currentPhase": "canonical-manual-funnel-tracking",
+    "activationEvent": "brief-shared",
+    "funnelSteps": [
+      "visit",
+      "brief-created",
+      "brief-shared",
+      "reply-received",
+      "account-converted"
+    ]
   },
   "sections": [
     {
-      "id": "prototype-parity-status",
-      "title": "Prototype Parity Status",
-      "description": "Whether the shipped experience matches the approved prototype slice closely enough to trust funnel observations.",
+      "id": "funnel-definition",
+      "title": "Approved Funnel Definition",
+      "description": "Locked product analytics baseline for BriefLink.",
       "type": "status-list",
       "source": "manual",
-      "updatedAt": "2026-04-29T21:17:35.547Z",
+      "updatedAt": "2026-04-29T21:21:20.000Z",
       "items": [
         {
-          "label": "Canonical slice",
+          "label": "Funnel",
           "status": "active",
-          "value": "Create Brief from Link",
-          "note": "Approved as the active product slice to mirror operationally."
+          "value": "visit -> brief-created -> brief-shared -> reply-received -> account-converted",
+          "note": "Use this exact five-step sequence for reporting."
         },
         {
-          "label": "Implementation parity",
-          "status": "partial",
-          "value": "In progress",
-          "note": "Engineering has active frontend/backend implementation work, but parity is not yet confirmed complete."
+          "label": "Activation",
+          "status": "active",
+          "value": "brief-shared",
+          "note": "Activation is defined at brief-shared."
         },
         {
-          "label": "Funnel-readiness confidence",
-          "status": "limited",
-          "value": "Use caution",
-          "note": "Manual counts are useful for trend visibility, but not for final conversion conclusions until parity closes."
+          "label": "Metric confidence",
+          "status": "manual",
+          "value": "Medium",
+          "note": "Counts remain manual until instrumentation exists; downstream stages may be assumed/manual where prototype parity is incomplete."
         }
       ]
     },
     {
       "id": "core-funnel",
       "title": "Core Funnel",
-      "description": "Manual source-of-truth counters for the first product loop.",
+      "description": "Manual counters for the approved BriefLink funnel.",
       "type": "metric-grid",
       "source": "manual",
-      "updatedAt": "2026-04-29T21:17:35.547Z",
+      "updatedAt": "2026-04-29T21:21:20.000Z",
       "metrics": [
         {
-          "id": "create-brief-starts",
-          "label": "Create-brief starts",
+          "id": "visit",
+          "label": "visit",
           "value": null,
           "unit": "count",
           "status": "needs-update",
-          "definition": "Number of sessions/users who begin the create-brief flow."
+          "confidence": "medium",
+          "definition": "Users who enter the top of the approved funnel.",
+          "dependencyNote": "Manual until instrumentation exists."
         },
         {
-          "id": "create-brief-completions",
-          "label": "Create-brief completions",
+          "id": "brief-created",
+          "label": "brief-created",
           "value": null,
           "unit": "count",
           "status": "needs-update",
-          "definition": "Number of successfully completed brief generations."
+          "confidence": "medium",
+          "definition": "Users who create a brief.",
+          "dependencyNote": "Manual until instrumentation exists."
         },
         {
-          "id": "share-link-copies",
-          "label": "Share-link copies",
+          "id": "brief-shared",
+          "label": "brief-shared",
           "value": null,
           "unit": "count",
           "status": "needs-update",
-          "definition": "Number of times users copy the generated brief/share link."
+          "confidence": "medium",
+          "definition": "Users who share a brief. This is the activation event.",
+          "dependencyNote": "Manual until instrumentation exists."
         },
         {
-          "id": "read-view-opens",
-          "label": "Read-view opens",
+          "id": "reply-received",
+          "label": "reply-received",
           "value": null,
           "unit": "count",
-          "status": "needs-update",
-          "definition": "Number of recipient/read-side opens of a shared brief link."
+          "status": "assumed-manual",
+          "confidence": "low",
+          "definition": "Shared briefs that receive a reply.",
+          "dependencyNote": "Assumed/manual until reply tracking is instrumented and represented in the prototype."
+        },
+        {
+          "id": "account-converted",
+          "label": "account-converted",
+          "value": null,
+          "unit": "count",
+          "status": "assumed-manual",
+          "confidence": "low",
+          "definition": "Users or accounts that convert after the reply stage.",
+          "dependencyNote": "Assumed/manual until conversion tracking is instrumented and represented in the prototype."
+        }
+      ]
+    },
+    {
+      "id": "prototype-parity",
+      "title": "Prototype Parity",
+      "description": "Tracks which approved funnel stages are currently represented in the additive prototype versus still inferred operationally.",
+      "type": "status-list",
+      "source": "manual",
+      "updatedAt": "2026-04-29T21:21:20.000Z",
+      "items": [
+        {
+          "label": "visit",
+          "status": "partial",
+          "value": "Assumed entry point",
+          "note": "Top-of-funnel visit exists conceptually for reporting, but direct instrumentation/parity may still be incomplete."
+        },
+        {
+          "label": "brief-created",
+          "status": "represented",
+          "value": "Prototype-supported",
+          "note": "Current additive prototype includes brief creation flow representation."
+        },
+        {
+          "label": "brief-shared",
+          "status": "represented",
+          "value": "Prototype-supported",
+          "note": "Current additive prototype includes brief sharing; this is the activation event."
+        },
+        {
+          "label": "reply-received",
+          "status": "not-yet-represented",
+          "value": "Assumed/manual",
+          "note": "Not yet instrumented or represented in the current prototype; track manually if needed."
+        },
+        {
+          "label": "account-converted",
+          "status": "not-yet-represented",
+          "value": "Assumed/manual",
+          "note": "Not yet instrumented or represented in the current prototype; track manually if needed."
         }
       ]
     },
     {
       "id": "manual-source-of-truth",
       "title": "Manual Source of Truth",
-      "description": "Where operators should collect and overwrite dashboard values until instrumentation is available.",
+      "description": "How to maintain this dashboard while instrumentation is pending.",
       "type": "field-list",
       "source": "manual",
-      "updatedAt": "2026-04-29T21:17:35.547Z",
+      "updatedAt": "2026-04-29T21:21:20.000Z",
       "fields": [
         {
           "label": "Counting method",
-          "value": "Manual tally from prototype tests, QA walkthroughs, founder/operator usage, and any temporary logs."
+          "value": "Manual tally from operating review, product reporting, and temporary evidence sources."
         },
         {
-          "label": "Update trigger",
-          "value": "Overwrite counts when any new observed session meaningfully changes the funnel picture."
+          "label": "Update rule",
+          "value": "Overwrite counts only with the approved five-step funnel: visit, brief-created, brief-shared, reply-received, account-converted."
+        },
+        {
+          "label": "Activation rule",
+          "value": "Treat brief-shared as the activation event everywhere in this dashboard."
+        },
+        {
+          "label": "Prototype parity caveat",
+          "value": "reply-received and account-converted remain assumed/manual until they are instrumented or explicitly represented in the prototype."
         },
         {
           "label": "Primary owner",
-          "value": "vizops maintains the dashboard; product/engineering should supply new observed values."
-        },
-        {
-          "label": "Confidence note",
-          "value": "Record directional truth, not false precision. Leave value null if no reliable count exists."
+          "value": "vizops maintains the dashboard; product and growth should provide updated manual counts until instrumentation exists."
         }
       ]
     },
     {
-      "id": "open-decisions-and-gaps",
-      "title": "Open UX/Content Decisions Tied to Prototype Gaps",
-      "description": "Decision list to resolve before parity can be called complete and funnel interpretation can tighten.",
+      "id": "decision-record",
+      "title": "Resolved Funnel Decisions",
+      "description": "Approved decisions currently reflected in this dashboard.",
       "type": "decision-list",
       "source": "manual",
-      "updatedAt": "2026-04-29T21:17:35.547Z",
+      "updatedAt": "2026-04-29T21:21:20.000Z",
       "items": [
         {
-          "decision": "Confirm exact create-brief entry-state and CTA copy used in the approved prototype.",
-          "status": "open",
-          "impact": "Affects what counts as a funnel start and whether start-rate comparisons are apples-to-apples."
+          "decision": "Approved funnel sequence",
+          "status": "decided",
+          "resolution": "Use visit -> brief-created -> brief-shared -> reply-received -> account-converted.",
+          "impact": "All reporting now uses one locked five-step funnel."
         },
         {
-          "decision": "Confirm what completion means operationally: brief generated, brief saved, or share-ready state.",
-          "status": "open",
-          "impact": "Changes completion counting and denominator logic."
+          "decision": "Activation definition",
+          "status": "decided",
+          "resolution": "Define activation at brief-shared.",
+          "impact": "Activation reporting now uses a stable, approved event."
         },
         {
-          "decision": "Confirm the share action to track as canonical: copy link, native share, or both.",
-          "status": "open",
-          "impact": "Determines whether share-link copies are a narrow proxy or the actual share metric."
+          "decision": "Prototype parity treatment",
+          "status": "decided",
+          "resolution": "Keep reply-received and account-converted marked assumed/manual until represented or instrumented.",
+          "impact": "The dashboard stays operational without overstating prototype completeness."
         },
         {
-          "decision": "Confirm reader open definition: unique viewers, total opens, or first open per brief.",
-          "status": "open",
-          "impact": "Prevents read-view metrics from overstating engagement."
-        },
-        {
-          "decision": "Confirm any missing microcopy or loading/error states that differ from the prototype.",
-          "status": "open",
-          "impact": "Prototype mismatch can distort drop-off and qualitative feedback."
+          "decision": "Metric collection mode",
+          "status": "decided",
+          "resolution": "Keep counts manual until instrumentation exists.",
+          "impact": "The dashboard stays operational without inventing unsupported data."
         }
       ]
     }
