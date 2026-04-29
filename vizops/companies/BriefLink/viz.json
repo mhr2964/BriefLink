@@ -1,23 +1,22 @@
 {
   "dashboardId": "brieflink-core-loop",
   "title": "BriefLink Core Loop Ops Dashboard",
-  "version": "1.5",
-  "lastUpdated": "2026-04-29T21:26:30.000Z",
+  "version": "1.6",
+  "lastUpdated": "2026-04-29T21:33:22.134Z",
   "freshness": {
     "status": "manual-update-required",
-    "updatedAt": "2026-04-29T21:26:30.000Z",
+    "updatedAt": "2026-04-29T21:33:22.134Z",
     "source": "manual",
     "owner": "vizops",
-    "cadence": "Update when funnel semantics, parity status, or manual counts change.",
+    "cadence": "Update when approved funnel semantics or manual counts change.",
     "staleAfterHours": 24,
-    "confidenceRule": "Funnel semantics are locked by CEO decision. Prototype parity is partial parity; downstream stages remain manual where instrumentation or representation is incomplete."
+    "confidenceRule": "Funnel semantics and activation are CEO-approved. Counts remain manual until instrumentation exists."
   },
   "summary": {
-    "focus": "Track the approved BriefLink funnel from visit to account conversion, with current operating priority on post-share progress toward first reply.",
+    "focus": "Track the approved BriefLink funnel from visit to account conversion using the locked baseline semantics.",
     "sourceOfTruth": "CEO-approved funnel semantics with manual operating inputs until instrumentation is live.",
-    "currentPhase": "partial-parity-post-share-priority",
+    "currentPhase": "approved-baseline-manual-reporting",
     "activationEvent": "brief-shared",
-    "parityClassification": "partial parity",
     "funnelSteps": [
       "visit",
       "brief-created",
@@ -33,7 +32,7 @@
       "description": "Locked product analytics baseline for BriefLink.",
       "type": "status-list",
       "source": "manual",
-      "updatedAt": "2026-04-29T21:26:30.000Z",
+      "updatedAt": "2026-04-29T21:33:22.134Z",
       "items": [
         {
           "label": "Funnel",
@@ -48,16 +47,10 @@
           "note": "Activation is defined at brief-shared."
         },
         {
-          "label": "Current parity classification",
-          "status": "active",
-          "value": "partial parity",
-          "note": "Creation and sharing are represented; downstream reply and conversion remain assumed/manual."
-        },
-        {
           "label": "Metric confidence",
           "status": "manual",
           "value": "Medium",
-          "note": "Counts remain manual until instrumentation exists; downstream stages may be assumed/manual where prototype parity is incomplete."
+          "note": "Counts remain manual until instrumentation exists."
         }
       ]
     },
@@ -67,7 +60,7 @@
       "description": "Manual counters for the approved BriefLink funnel.",
       "type": "metric-grid",
       "source": "manual",
-      "updatedAt": "2026-04-29T21:26:30.000Z",
+      "updatedAt": "2026-04-29T21:33:22.134Z",
       "metrics": [
         {
           "id": "visit",
@@ -84,135 +77,40 @@
           "label": "brief-created",
           "value": null,
           "unit": "count",
-          "status": "represented",
+          "status": "needs-update",
           "confidence": "medium",
           "definition": "Users who create a brief.",
-          "dependencyNote": "Represented in the current prototype; counts remain manual until instrumentation exists."
+          "dependencyNote": "Manual until instrumentation exists."
         },
         {
           "id": "brief-shared",
           "label": "brief-shared",
           "value": null,
           "unit": "count",
-          "status": "represented",
+          "status": "needs-update",
           "confidence": "medium",
           "definition": "Users who share a brief. This is the activation event.",
-          "dependencyNote": "Represented in the current prototype; counts remain manual until instrumentation exists."
+          "dependencyNote": "Manual until instrumentation exists."
         },
         {
           "id": "reply-received",
           "label": "reply-received",
           "value": null,
           "unit": "count",
-          "status": "assumed-manual",
-          "confidence": "low",
+          "status": "needs-update",
+          "confidence": "medium",
           "definition": "Shared briefs that receive a reply.",
-          "dependencyNote": "Assumed/manual until reply tracking is instrumented and represented through post-share status and first-reply visibility."
+          "dependencyNote": "Manual until instrumentation exists."
         },
         {
           "id": "account-converted",
           "label": "account-converted",
           "value": null,
           "unit": "count",
-          "status": "assumed-manual",
-          "confidence": "low",
+          "status": "needs-update",
+          "confidence": "medium",
           "definition": "Users or accounts that convert after the reply stage.",
-          "dependencyNote": "Assumed/manual until conversion tracking is instrumented and represented in the prototype."
-        }
-      ]
-    },
-    {
-      "id": "parity-breakdown",
-      "title": "Parity Breakdown",
-      "description": "Separate what the current prototype represents from what operations still assumes manually.",
-      "type": "split-list",
-      "source": "manual",
-      "updatedAt": "2026-04-29T21:26:30.000Z",
-      "columns": [
-        {
-          "label": "Represented stages",
-          "items": [
-            "brief-created",
-            "brief-shared"
-          ],
-          "note": "These stages are currently represented in the additive prototype."
-        },
-        {
-          "label": "Assumed stages",
-          "items": [
-            "visit",
-            "reply-received",
-            "account-converted"
-          ],
-          "note": "These stages still rely on manual interpretation, operating review, or future instrumentation."
-        }
-      ]
-    },
-    {
-      "id": "current-priority-focus",
-      "title": "Current Priority Focus",
-      "description": "Operational focus for the next product/dashboard slice.",
-      "type": "status-list",
-      "source": "manual",
-      "updatedAt": "2026-04-29T21:26:30.000Z",
-      "items": [
-        {
-          "label": "Priority transition",
-          "status": "active",
-          "value": "brief-shared -> reply-received",
-          "note": "Primary goal is advancing users from activation into first measurable response."
-        },
-        {
-          "label": "Post-share status",
-          "status": "next-slice",
-          "value": "Needed",
-          "note": "Add explicit post-share state so operators can tell whether a shared brief is awaiting a response, has activity, or remains unresolved."
-        },
-        {
-          "label": "First-reply visibility",
-          "status": "next-slice",
-          "value": "Needed",
-          "note": "Make first reply visible so the team can track movement into reply-received without relying only on offline/manual interpretation."
-        }
-      ]
-    },
-    {
-      "id": "prototype-parity",
-      "title": "Prototype Parity",
-      "description": "Tracks which approved funnel stages are currently represented in the additive prototype versus still inferred operationally.",
-      "type": "status-list",
-      "source": "manual",
-      "updatedAt": "2026-04-29T21:26:30.000Z",
-      "items": [
-        {
-          "label": "Parity classification",
-          "status": "active",
-          "value": "partial parity",
-          "note": "The prototype covers creation and sharing, but not the full post-share funnel."
-        },
-        {
-          "label": "brief-created",
-          "status": "represented",
-          "value": "Prototype-supported",
-          "note": "Current additive prototype includes brief creation flow representation."
-        },
-        {
-          "label": "brief-shared",
-          "status": "represented",
-          "value": "Prototype-supported",
-          "note": "Current additive prototype includes brief sharing; this is the activation event."
-        },
-        {
-          "label": "reply-received",
-          "status": "not-yet-represented",
-          "value": "Assumed/manual",
-          "note": "Not yet instrumented or represented in the current prototype; post-share status and first-reply visibility are the next priority slice."
-        },
-        {
-          "label": "account-converted",
-          "status": "not-yet-represented",
-          "value": "Assumed/manual",
-          "note": "Not yet instrumented or represented in the current prototype; track manually if needed."
+          "dependencyNote": "Manual until instrumentation exists."
         }
       ]
     },
@@ -222,7 +120,7 @@
       "description": "How to maintain this dashboard while instrumentation is pending.",
       "type": "field-list",
       "source": "manual",
-      "updatedAt": "2026-04-29T21:26:30.000Z",
+      "updatedAt": "2026-04-29T21:33:22.134Z",
       "fields": [
         {
           "label": "Counting method",
@@ -237,12 +135,8 @@
           "value": "Treat brief-shared as the activation event everywhere in this dashboard."
         },
         {
-          "label": "Parity rule",
-          "value": "Classify current state as partial parity until post-share status and first-reply visibility exist for reply-received."
-        },
-        {
-          "label": "Prototype parity caveat",
-          "value": "reply-received and account-converted remain assumed/manual until they are instrumented or explicitly represented in the prototype."
+          "label": "Approval rule",
+          "value": "Do not add new parity or product-priority semantics to baseline-facing sections without product leadership approval."
         },
         {
           "label": "Primary owner",
@@ -256,7 +150,7 @@
       "description": "Approved decisions currently reflected in this dashboard.",
       "type": "decision-list",
       "source": "manual",
-      "updatedAt": "2026-04-29T21:26:30.000Z",
+      "updatedAt": "2026-04-29T21:33:22.134Z",
       "items": [
         {
           "decision": "Approved funnel sequence",
@@ -271,22 +165,16 @@
           "impact": "Activation reporting now uses a stable, approved event."
         },
         {
-          "decision": "Current parity classification",
-          "status": "decided",
-          "resolution": "Treat the current dashboard/prototype state as partial parity.",
-          "impact": "Operational reporting now clearly separates represented stages from assumed stages."
-        },
-        {
-          "decision": "Next operating priority",
-          "status": "decided",
-          "resolution": "Prioritize post-share status and first-reply visibility to advance from brief-shared into reply-received.",
-          "impact": "The next dashboard/product slice is focused on post-share progress rather than redefining the funnel."
-        },
-        {
           "decision": "Metric collection mode",
           "status": "decided",
           "resolution": "Keep counts manual until instrumentation exists.",
           "impact": "The dashboard stays operational without inventing unsupported data."
+        },
+        {
+          "decision": "Further semantics changes",
+          "status": "pending-approval",
+          "resolution": "Any future parity or product-priority framing must be approved by product leadership before appearing in the baseline dashboard.",
+          "impact": "The live artifact remains frozen to the CEO-approved baseline until product leadership approves changes."
         }
       ]
     }

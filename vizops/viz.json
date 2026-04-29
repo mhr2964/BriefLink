@@ -1,0 +1,138 @@
+{
+  "company": "BriefLink",
+  "updatedAt": "2026-04-29T22:14:30Z",
+  "activeWave": "Activated Brief Status",
+  "summary": "Operating sweep is active across exec lanes. Engineering reconciliation is underway under expanded CTO authority; product coherence and growth are in motion; archive and efficiency were activated because board and memory hygiene were thin; backend remains the clearest active blocker.",
+  "sections": [
+    {
+      "id": "exec-streams",
+      "title": "Exec Streams",
+      "status": "active",
+      "items": [
+        {
+          "owner": "CTO",
+          "status": "in_progress",
+          "note": "Owns the full engineering sweep across frontend, backend, ui-integration, parity-qa, spec-stitching, platform, and devops."
+        },
+        {
+          "owner": "Head of Product",
+          "status": "in_progress",
+          "note": "Driving prototype and brief coherence for the Activated Brief Status wave."
+        },
+        {
+          "owner": "Head of Growth",
+          "status": "in_progress",
+          "note": "Launch lane is active; concrete shipped growth outputs are not yet visible on the board."
+        },
+        {
+          "owner": "Chief of Staff",
+          "status": "in_progress",
+          "note": "Closing archive and board hygiene gaps after an effectively empty digest and memory baseline."
+        }
+      ]
+    },
+    {
+      "id": "engineering-reconciliation",
+      "title": "Engineering Reconciliation",
+      "status": "in_progress",
+      "items": [
+        {
+          "lane": "frontend",
+          "status": "progress_visible",
+          "note": "Activated Brief Status view files were written; frontend scope is now narrowed to view construction."
+        },
+        {
+          "lane": "ui-integration",
+          "status": "in_progress",
+          "note": "Recon identified `frontend/src/ActivatedBriefStatusView.tsx`; CEO requested integration-closure handoff from that artifact."
+        },
+        {
+          "lane": "backend",
+          "status": "blocked",
+          "note": "Monitoring implementation companion remains partial/truncated; CTO paused the completion loop and escalated the blocker."
+        },
+        {
+          "lane": "parity-qa/spec-stitching/platform/devops",
+          "status": "sweep_active",
+          "note": "Under CTO reconciliation authority; no fresh blocking board evidence yet beyond backend."
+        }
+      ]
+    },
+    {
+      "id": "product-coherence",
+      "title": "Product Coherence",
+      "status": "in_progress",
+      "items": [
+        {
+          "topic": "wave",
+          "status": "locked",
+          "note": "Activated Brief Status is the active product wave."
+        },
+        {
+          "topic": "funnel",
+          "status": "locked",
+          "note": "Canonical funnel remains visit -> brief-created -> brief-shared -> reply-received -> account-converted; activation remains brief-shared."
+        },
+        {
+          "topic": "coherence-work",
+          "status": "active",
+          "note": "Current product work is focused on post-activation core experience clarity rather than new scope."
+        }
+      ]
+    },
+    {
+      "id": "growth-lane",
+      "title": "Growth Lane",
+      "status": "in_progress",
+      "items": [
+        {
+          "status": "active",
+          "note": "Growth was activated in the operating sweep to advance launch assets."
+        },
+        {
+          "status": "awaiting-visible-output",
+          "note": "No concrete growth deliverable is yet visible in the recent board slice."
+        }
+      ]
+    },
+    {
+      "id": "archive-efficiency",
+      "title": "Archive + Efficiency",
+      "status": "in_progress",
+      "items": [
+        {
+          "lane": "archive",
+          "status": "active",
+          "note": "Archivist was activated to snapshot the phase transition."
+        },
+        {
+          "lane": "efficiency",
+          "status": "active",
+          "note": "Efficiency was activated to assess whether current parallel execution is healthy."
+        },
+        {
+          "lane": "hygiene",
+          "status": "needs_improvement",
+          "note": "Board digest has no entries and memory was described as effectively empty, so freshness discipline is part of this sweep."
+        }
+      ]
+    },
+    {
+      "id": "blocked-items",
+      "title": "Blocked Items",
+      "status": "attention_required",
+      "items": [
+        {
+          "item": "Backend monitoring companion",
+          "status": "blocked",
+          "note": "Partial artifact could not be confirmed complete because builder output truncated repeatedly."
+        }
+      ]
+    }
+  ],
+  "freshness": {
+    "sourceWindow": "CEO operating sweep and board activity through 2026-04-29T22:14:30Z",
+    "confidence": "medium",
+    "note": "High confidence on active lanes and blockers; lower confidence on exact progress inside growth/archive/efficiency because outputs are only partially visible so far."
+  }
+}
