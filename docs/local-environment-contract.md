@@ -1,249 +1,333 @@
 # Local Environment Contract
 
-_Last updated by platform on this round._
+_Last updated by platform in Round 3._
 
 ## Purpose
 
-This document defines the minimum contract for local environment documentation and configuration handoff across departments. It is intentionally limited to platform-evidenced process and file expectations. It does **not** invent app behavior or service requirements.
+This document defines the platform-owned contract for how local environment requirements should be documented and shared across teams. It captures only evidence-backed setup expectations and explicit placeholders for anything not yet established.
 
-## Contract scope
+It is intended to be the shared reference for `frontend`, `backend`, `ui-integration`, and `parity-qa` when describing local environment dependencies in a way that is:
 
-This contract applies to:
+- repo-visible
+- auditable
+- non-speculative
+- safe for cross-team use
 
-- root/shared environment templates owned by platform
-- documentation of required variables and local prerequisites
-- handoff expectations for `frontend`, `backend`, `ui-integration`, and `parity-qa`
+## Evidence rule
 
-This contract does **not** define:
+A statement belongs in this contract only if it is one of the following:
 
-- secret values
-- app-specific business logic
-- service behavior
-- test outcomes
-- deployment semantics unless separately evidenced
+- visible in a platform-owned repository artifact
+- explicitly confirmed by management in current platform instructions
+- supplied by the owning department in a reviewable artifact that platform can cite
 
-## Current baseline assumptions platform can state
+If a detail is not evidenced, this contract must label it as missing or placeholder rather than inventing a default.
 
-From the current assignment context, platform can state only the following:
+## Known Ready
 
-- a root script baseline exists
-- a baseline environment template/setup exists
-- fuller shared documentation was still needed before this round
-- platform owns the shared documentation and contract layer under `workspace/docs/`
+The following contract elements are currently ready and may be relied on at the platform level.
 
-If any team needs stronger guarantees than the above, those guarantees must be documented in an evidenced artifact before they are treated as contractually available.
+### 1. Contract location
 
-## Contract rules
+The shared local environment contract now exists at:
 
-### 1. No secret values in repo-owned docs
+- `workspace/docs/local-environment-contract.md`
 
-This repository may document:
+The corresponding status summary exists at:
+
+- `workspace/docs/environment-status-report.md`
+
+### 2. Platform-owned documentation layer exists
+
+Platform has now provided a shared place for:
+
+- reporting current environment readiness
+- identifying missing prerequisites
+- documenting team unblock status
+- publishing future evidence-backed updates
+
+### 3. Manager-confirmed baseline exists
+
+Recent manager instructions establish the following as available at baseline:
+
+- root workspace scripts exist
+- baseline env setup exists
+
+This contract treats those as current high-level facts only. It does not infer detailed usage beyond what has been evidenced.
+
+## Missing Prerequisites
+
+The following parts of the local environment contract are still unresolved and must not be assumed.
+
+### 1. Exact file paths for env templates
+
+Not yet evidenced:
+
+- root env template path(s)
+- service-specific env template path(s)
+- copy/setup instructions for local developer use
+
+Placeholder:
+
+- `[missing evidence: exact env-template file inventory]`
+
+### 2. Variable matrix per service
+
+Not yet evidenced:
 
 - variable names
-- whether a variable is required or optional
-- who owns provisioning of the value
-- where the value is expected to be injected locally
+- required vs optional status
+- consuming service/app
+- safe placeholder examples
+- ownership of real values
+- behavior when omitted
 
-This repository must **not** document:
+Placeholder:
 
-- real secrets
+- `[missing evidence: per-service variable matrix]`
+
+### 3. Local prerequisite inventory
+
+Not yet evidenced:
+
+- runtime/toolchain versions
+- package manager expectations
+- databases, queues, or third-party services
+- migrations/seeding requirements
+- local browser/device assumptions if any
+
+Placeholder:
+
+- `[missing evidence: local prerequisite inventory]`
+
+### 4. Startup contract
+
+Not yet evidenced:
+
+- startup commands
+- dependency order
+- local ports
+- base URLs
+- ready/healthy signals
+
+Placeholder:
+
+- `[missing evidence: local startup contract]`
+
+### 5. Secret handling contract
+
+Not yet evidenced:
+
+- secret ownership
+- local secret placement rules
+- injection mechanism expectations
+- CI/staging mapping to local placeholders
+
+Placeholder:
+
+- `[missing evidence: secret ownership and injection contract]`
+
+## Contract Rules
+
+### 1. No real secrets in shared docs
+
+This contract may include:
+
+- variable names
+- placeholder values
+- ownership notes
+- required/optional status
+- setup instructions that do not reveal secrets
+
+This contract must not include:
+
+- real secret values
 - personal tokens
 - production credentials
-- unredacted connection strings intended to remain private
+- unredacted sensitive connection strings
 
-### 2. Environment requirements must be named, not implied
+### 2. Unknowns must remain explicit
 
-For any service/app that expects environment configuration, the owning department should provide an evidenced list containing:
+If a team has not published an evidenced requirement, the contract must use a placeholder such as:
 
-- variable name
-- required/optional status
-- consumer(s)
-- safe example or placeholder format
-- notes on what happens if omitted, if known
-- owner of the real value
+- `[missing evidence: frontend variables]`
+- `[missing evidence: backend startup command]`
+- `[missing evidence: integration base URL]`
 
-If that list does not exist, teams should treat the requirement set as incomplete.
+Unknowns must not be replaced with guessed defaults.
 
-### 3. Platform owns the shared contract format
+### 3. Service owners define service requirements
 
 Platform owns:
 
-- the existence and location of shared environment documentation
-- root/shared template conventions
-- repo-visible guidance for how departments describe env needs
+- shared contract structure
+- shared documentation location
+- root/shared environment documentation process
 
-Other departments own:
+Service-owning teams own:
 
-- declaring the variables their software actually consumes
-- correcting inaccurate service-specific claims
-- validating their runtime behavior
+- the actual variables their software consumes
+- the actual startup steps for their software
+- the runtime validation of those requirements
 
-### 4. Runtime truth belongs to service owners
+### 4. Documentation is not runtime proof
 
-A variable documented in a template or contract is not the same as a verified runtime configuration.
+A variable or command listed in a contract is only documentation until verified by the owning team.
 
-Service-owning departments must separately confirm:
+This contract does **not** by itself prove that:
 
-- the app starts with the documented variables
-- the documented defaults/placeholders are accurate
-- any required external dependency is reachable
-- missing-variable behavior is as described
+- services boot successfully
+- integrations function
+- tests pass
+- dependencies are reachable
 
-### 5. QA and integration may rely only on evidenced setup
+### 5. Repo-visible updates only
 
-`ui-integration` and `parity-qa` may rely on:
+To become part of the shared contract, new environment details should be added in a repo-visible, reviewable form rather than passed informally.
 
-- documented variable names and placeholders
-- documented local prerequisites
-- documented run-order dependencies
-- documented ports/base URLs
+## Team Unblock Notes
 
-They may **not** assume:
+### `frontend`
 
-- credentials exist
-- services are running
-- data is seeded
-- cross-service flows are valid
+Unblocked now for:
 
-unless those conditions are separately evidenced.
+- using this contract as the required format for publishing frontend env needs
+- identifying missing frontend setup details as named placeholders
+- relying on a stable shared documentation path
 
-## Required artifact shape
+Still blocked on missing evidence for:
 
-When environment details are mature enough to publish, the shared contract should include, at minimum, the following sections.
+- exact frontend variable list
+- exact frontend startup command
+- exact frontend local port/base URL
 
-## A. File locations
+### `backend`
 
-Document all relevant env/config files, for example:
+Unblocked now for:
 
-- root template file path: `[placeholder: path not yet cited in this document]`
-- service-specific template file path(s): `[placeholder]`
-- setup/readme references: `[placeholder]`
+- using this contract as the required format for publishing backend env needs
+- documenting backend prerequisites in a shared, auditable place
+- aligning backend config reporting with platform rules
 
-If the actual paths are known later, replace placeholders with exact repo paths.
+Still blocked on missing evidence for:
 
-## B. Variable matrix
+- exact backend variable list
+- exact backend startup command
+- exact backend local port/base URL
+- exact external dependency requirements
 
-Each service/app should eventually publish a matrix like the following:
+### `ui-integration`
 
-| Variable | Required? | Consumed by | Example/Placeholder | Value owner | Notes |
+Unblocked now for:
+
+- using this contract to identify the missing composition contract
+- requesting explicit env and routing details from service owners
+- distinguishing documented setup from assumptions
+
+Still blocked on missing evidence for:
+
+- integration routing/base URLs
+- startup order across services
+- integration-specific env requirements
+- verified combined runtime
+
+### `parity-qa`
+
+Unblocked now for:
+
+- using this contract to cite missing prerequisites precisely
+- mapping QA blockers to documented setup gaps
+- avoiding reliance on undocumented environment assumptions
+
+Still blocked on missing evidence for:
+
+- runnable target confirmation
+- QA preconditions
+- data/account assumptions
+- stable verified service endpoints
+
+## Required contract shape for future updates
+
+When teams provide evidence-backed environment details, this contract should be expanded to include the following sections.
+
+### A. File inventory
+
+Required fields:
+
+- exact file path
+- purpose
+- owner
+- whether committed or local-only
+
+Current placeholder:
+
+- `[missing evidence: file inventory]`
+
+### B. Variable matrix
+
+Use the following structure:
+
+| Variable | Required | Consumed by | Safe placeholder/example | Value owner | Notes |
 |---|---|---|---|---|---|
-| `[PLACEHOLDER_VAR]` | `[required/optional]` | `[service/app]` | `[safe-placeholder]` | `[team/person/system]` | `[behavior or notes]` |
+| `[PLACEHOLDER_VAR]` | `[yes/no]` | `[service/app]` | `[safe-placeholder]` | `[team/system]` | `[notes]` |
 
-At present, this matrix is a required placeholder and not yet populated by evidenced service data in this assignment.
+Current placeholder:
 
-## C. Local prerequisites
+- `[missing evidence: variable matrix]`
 
-Each runnable surface should document prerequisites such as:
+### C. Local prerequisites
 
-- language/runtime version
-- package manager expectation
-- database or external service dependency
-- seed/migration requirement
-- required local ports
-- browser/device assumptions if relevant
+Required fields:
 
-Current state in this document: `[placeholder: prerequisite list not yet evidenced here]`
+- prerequisite
+- why it is needed
+- owner
+- whether mandatory for all contributors or role-specific
 
-## D. Startup contract
+Current placeholder:
 
-Each runnable surface should eventually state:
+- `[missing evidence: local prerequisites table]`
 
+### D. Startup/runtime table
+
+Required fields:
+
+- service/app
 - startup command
-- expected dependent services
-- expected base URL/port
-- health-check or ready signal, if one exists
-
-Current state in this document: `[placeholder: startup contract not yet evidenced here]`
-
-## E. Ownership map
-
-Every variable or prerequisite should have an owner category:
-
-- `platform` — shared template location/format, root guidance
-- `frontend` — frontend-consumed variables and runtime validation
-- `backend` — backend-consumed variables and runtime validation
-- `ui-integration` — integration-specific composition assumptions
-- `parity-qa` — test preconditions and environment usage assumptions
-- `[placeholder for additional owner]`
-
-## Presently acceptable placeholders
-
-Until exact values/paths are confirmed, placeholders are acceptable only if they are explicit and non-misleading. Use forms like:
-
-- `[placeholder: exact env template path pending evidence]`
-- `[placeholder: backend-required variable list pending backend artifact]`
-- `[placeholder: frontend local port pending frontend artifact]`
-
-Do **not** replace unknowns with guessed defaults.
-
-## Minimum handoff expectations by team
-
-## `frontend`
-
-Should provide, in an evidenced artifact:
-
-- variables consumed by frontend code/tooling
-- whether each is required for local boot
-- expected local port/base URL
-- backend dependency assumptions, if any
-
-## `backend`
-
-Should provide, in an evidenced artifact:
-
-- variables consumed by backend services
-- required external dependencies
-- startup command and ready condition
+- dependencies
 - local port/base URL
-- safe placeholders for non-secret config
+- ready signal
 
-## `ui-integration`
+Current placeholder:
 
-Should provide, in an evidenced artifact:
+- `[missing evidence: startup/runtime table]`
 
-- composition assumptions across frontend/backend surfaces
-- any integration-only variables or routing assumptions
-- required order of service startup, if any
-- what “ready for integration” means in observable terms
+## Current safe use of this contract
 
-## `parity-qa`
+Teams may safely use this contract to:
 
-Should provide, in an evidenced artifact:
+- document what is known
+- mark what is missing
+- coordinate environment handoff in a standard format
+- avoid converting assumptions into false guarantees
 
-- test preconditions
-- required accounts/data/state assumptions
-- environment selection assumptions
-- blockers caused by missing variables, services, or setup docs
+Teams may not safely use this contract to claim:
 
-## Platform acceptance rule
-
-Platform may treat an environment detail as part of the shared contract only when it is:
-
-- present in a platform-owned file, or
-- supplied by the owning department in a reviewable artifact, or
-- explicitly confirmed through management
-
-Until then, the correct contract state is a placeholder.
+- any specific variable exists unless listed in evidence-backed form
+- any service boots unless verified by its owner
+- any integration path works unless evidenced
+- any QA run is ready unless prerequisites are published and satisfied
 
 ## Open placeholders to resolve
 
-- [ ] Exact root env-template file path(s)
-- [ ] Exact root script names and purpose
-- [ ] Frontend variable matrix
-- [ ] Backend variable matrix
-- [ ] Integration composition prerequisites
-- [ ] QA precondition matrix
-- [ ] Port/base URL matrix
-- [ ] External dependency list
-- [ ] Local startup sequence
-- [ ] Secret ownership/injection guidance
-
-## Change policy
-
-When updating this contract:
-
-1. Preserve factual, evidenced statements.
-2. Replace placeholders only with sourceable facts.
-3. Attribute service-specific requirements to the owning department.
-4. Avoid converting runtime hopes into contract guarantees.
-5. Prefer an explicit gap over an invented default.
+- [ ] exact root script inventory
+- [ ] exact env-template path inventory
+- [ ] frontend variable matrix
+- [ ] backend variable matrix
+- [ ] integration variable/routing matrix
+- [ ] QA precondition list
+- [ ] local prerequisite inventory
+- [ ] startup/runtime table
+- [ ] ports and base URLs
+- [ ] secret ownership/injection notes
+- [ ] runtime verification references

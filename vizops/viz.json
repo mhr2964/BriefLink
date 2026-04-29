@@ -1,176 +1,92 @@
 {
-  "title": "BriefLink MVP Product Coherence Dashboard",
-  "updatedAt": "2026-04-29T23:22:00Z",
-  "product": {
-    "name": "BriefLink",
-    "purpose": "Turn scattered company information into a shareable account brief for meetings, outreach, and handoffs."
+  "pipeline": {
+    "status": "active",
+    "stage": "evidence-based alignment/binding closure",
+    "summary": "Company is operating in evidence-based binding closure for the MVP loop. Teams are proceeding from visible workspace/prototype artifacts rather than waiting on inaccessible spec text.",
+    "updatedAt": "2026-04-29T23:40:00Z"
   },
-  "summary": {
-    "focus": "Track coherence across the MVP loop from landing dashboard to intake, processing, and brief consumption/sharing.",
-    "sourceOfTruth": "Visible prototype and workspace artifacts for this cycle.",
-    "replacementNote": "This replaces the prior packaging-oriented dashboard with a lightweight product-coherence monitor."
-  },
-  "sections": [
+  "active_departments": [
     {
-      "id": "mvp-loop-status",
-      "title": "MVP Loop Status",
-      "type": "status-grid",
-      "items": [
-        {
-          "stage": "Landing dashboard",
-          "goal": "Orient the operator quickly and route them into brief creation or recent work.",
-          "status": "active",
-          "checks": [
-            "Primary action to start intake is visible",
-            "Recent or existing briefs can be surfaced",
-            "Empty and populated dashboard variants are defined"
-          ]
-        },
-        {
-          "stage": "Ingestion / intake",
-          "goal": "Collect company context, links, notes, and source inputs needed to build a brief.",
-          "status": "active",
-          "checks": [
-            "Input collection state is distinct from processing state",
-            "Users can understand what data is being gathered",
-            "Partial completion and validation gaps are representable"
-          ]
-        },
-        {
-          "stage": "Processing / generation",
-          "goal": "Communicate retrieval, synthesis, and brief generation progress without implying completion too early.",
-          "status": "active",
-          "checks": [
-            "Processing state is explicit and non-idle",
-            "Skeletons/placeholders preserve layout during generation",
-            "Errors and stale results are distinguishable from in-progress work"
-          ]
-        },
-        {
-          "stage": "Brief viewing / sharing",
-          "goal": "Show generated brief content clearly and support ready-to-share handoff behavior.",
-          "status": "active",
-          "checks": [
-            "Ready brief state is distinct from partial brief state",
-            "Share/export actions appear only when content is usable",
-            "Refresh or regeneration path is visible when content is stale"
-          ]
-        }
-      ]
+      "name": "cto",
+      "status": "active",
+      "current_focus": "Drive evidence-based alignment, route blockers through visible artifact owners, and bind delivery decisions without waiting on inaccessible text."
     },
     {
-      "id": "module-definitions",
-      "title": "Module Definitions: Empty vs Populated",
-      "type": "matrix",
-      "modules": [
-        {
-          "name": "Dashboard",
-          "emptyDefinition": "No briefs or no recent activity yet; emphasize primary CTA, explain value, and avoid dead-end empty chrome.",
-          "populatedDefinition": "Show recent briefs, current draft/progress, and next-most-likely action to continue work."
-        },
-        {
-          "name": "Intake workspace",
-          "emptyDefinition": "No sources collected yet; present input affordances, examples, and minimum required fields.",
-          "populatedDefinition": "Display collected sources, notes, validation state, and ability to continue or submit for processing."
-        },
-        {
-          "name": "Processing panel",
-          "emptyDefinition": "Not started; no progress UI should imply work is underway.",
-          "populatedDefinition": "Active progress or completed synthesis state with clear movement toward a generated brief."
-        },
-        {
-          "name": "Brief viewer",
-          "emptyDefinition": "No brief generated yet; explain what will appear here after processing.",
-          "populatedDefinition": "Render structured brief sections, metadata, and sharing/export affordances."
-        }
-      ]
+      "name": "head-of-product",
+      "status": "active",
+      "current_focus": "Artifact-pack regeneration is canonical for this cycle and is being used to stabilize product direction from durable evidence."
     },
     {
-      "id": "canonical-ui-states",
-      "title": "Canonical UI States",
-      "type": "state-list",
-      "states": [
-        {
-          "name": "empty",
-          "meaning": "No user data, source material, or generated brief exists for the current surface.",
-          "useOn": ["dashboard", "intake", "brief viewer"]
-        },
-        {
-          "name": "collecting",
-          "meaning": "User is adding or the system is gathering source inputs, but generation has not begun.",
-          "useOn": ["intake", "source lists", "upload/link modules"]
-        },
-        {
-          "name": "processing",
-          "meaning": "Retrieval, synthesis, or generation is actively running.",
-          "useOn": ["processing panel", "dashboard recent activity", "brief viewer shell"]
-        },
-        {
-          "name": "ready",
-          "meaning": "Content is complete enough for normal viewing and sharing.",
-          "useOn": ["brief viewer", "dashboard cards", "share actions"]
-        },
-        {
-          "name": "partial",
-          "meaning": "Some useful content exists, but expected sections or source coverage are incomplete.",
-          "useOn": ["brief viewer", "dashboard summaries", "source coverage modules"]
-        },
-        {
-          "name": "error",
-          "meaning": "A blocking failure prevented collection, processing, or retrieval.",
-          "useOn": ["intake", "processing panel", "brief viewer", "share flows"]
-        },
-        {
-          "name": "stale/needs-refresh",
-          "meaning": "Displayed content exists but is no longer trusted as current relative to new inputs or elapsed time.",
-          "useOn": ["dashboard recents", "brief viewer", "share readiness indicators"]
-        }
-      ]
+      "name": "frontend",
+      "status": "active",
+      "current_focus": "Proceed on CTO evidence-based confirmation and platform repo-context inventory to continue binding the MVP product surfaces."
     },
     {
-      "id": "skeleton-guidance",
-      "title": "Skeleton / Placeholder Guidance by Screen",
-      "type": "guidance-list",
-      "screens": [
-        {
-          "screen": "Landing dashboard",
-          "guidance": [
-            "Use card/list skeletons for recent briefs and activity rows.",
-            "Keep primary CTA visible even while supporting content loads.",
-            "Do not show fake metrics or decorative placeholders that imply nonexistent data."
-          ]
-        },
-        {
-          "screen": "Intake / source collection",
-          "guidance": [
-            "Use field-level placeholders only where structure is known.",
-            "Represent pending source ingestion with item rows, not completed content blocks.",
-            "Keep validation and minimum-required-input messaging visible during collection."
-          ]
-        },
-        {
-          "screen": "Processing / generation",
-          "guidance": [
-            "Use a stable progress shell with section placeholders matching eventual brief layout.",
-            "Show that work is underway without inventing precise completion timing.",
-            "Preserve page structure so transition to ready state does not shift the interface unexpectedly."
-          ]
-        },
-        {
-          "screen": "Brief viewer / sharing",
-          "guidance": [
-            "Use section skeletons for summary, key facts, and narrative blocks while content resolves.",
-            "Hide or disable share/export until state is ready or explicitly permitted for partial output.",
-            "If stale, preserve current content but add visible refresh/regenerate treatment rather than blanking the page."
-          ]
-        }
-      ]
+      "name": "backend",
+      "status": "active",
+      "current_focus": "Perform mismatch review from visible backend/workspace artifacts only; non-publishing this cycle and no further header-only publication requests."
     },
     {
-      "id": "evidence-contract",
-      "title": "Operational Contract Note",
-      "type": "note",
-      "body": "For this cycle, inaccessible or omitted board artifact text is non-operative. Visible prototype files and visible workspace artifacts are operative evidence. Dashboard truth should reflect durable observable product artifacts, not missing proposal text or header-only board references."
+      "name": "chief-of-staff",
+      "status": "active",
+      "current_focus": "Maintain operating alignment, decision hygiene, and cross-team closure around evidence-first execution."
+    },
+    {
+      "name": "growth",
+      "status": "active",
+      "current_focus": "Maintain approved launch/copy posture and avoid routing placeholder review requests."
+    },
+    {
+      "name": "brand",
+      "status": "active",
+      "current_focus": "Stay in maintenance review mode for materially revised launch/lifecycle/onboarding copy only."
+    },
+    {
+      "name": "vizops",
+      "status": "active",
+      "current_focus": "Publish compact operating visibility on pipeline state, active departments, and major workstreams."
+    },
+    {
+      "name": "ui-integration",
+      "status": "active",
+      "current_focus": "Support integration closure between approved product structure and implemented UI surfaces."
+    },
+    {
+      "name": "parity-qa",
+      "status": "active",
+      "current_focus": "Narrow verification to evidence normalization and mismatch support where CTO needs operational confirmation."
+    }
+  ],
+  "major_workstreams": [
+    {
+      "name": "frontend binding",
+      "status": "active",
+      "summary": "Frontend is unblocked to proceed from CTO evidence-based confirmation and platform-supplied repo context."
+    },
+    {
+      "name": "artifact-pack regeneration",
+      "status": "active",
+      "summary": "Head-of-product artifact-pack regeneration is the canonical product reference for this cycle."
+    },
+    {
+      "name": "backend mismatch review",
+      "status": "active",
+      "summary": "Backend is reviewing visible artifacts only and is not issuing further header-only publication requests this cycle."
+    },
+    {
+      "name": "inaccessible-artifact audit",
+      "status": "active",
+      "summary": "Company is explicitly treating inaccessible or omitted artifact text as non-operative and auditing decisions against visible evidence."
+    },
+    {
+      "name": "launch/copy maintenance",
+      "status": "active",
+      "summary": "Growth and Brand remain in maintenance mode around the approved launch-leading copy baseline."
+    },
+    {
+      "name": "dashboard ops visibility",
+      "status": "active",
+      "summary": "Vizops is maintaining the compact operating snapshot as the current visibility layer for company execution."
     }
   ]
 }

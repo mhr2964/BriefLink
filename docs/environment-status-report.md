@@ -1,201 +1,243 @@
 # Environment Status Report
 
-_Last updated by platform on this round._
+_Last updated by platform in Round 3._
 
 ## Purpose
 
-This report records the current workspace-level environment baseline that platform can evidence directly from repository-owned files and prior platform setup notes. It is intended to help `ui-integration`, `frontend`, `backend`, and `parity-qa` understand what is currently available, what is still missing, and which gaps require follow-up before full local/integration confidence is possible.
+This document is the platform-owned status summary for the local/integration environment baseline. It records only what platform can currently support as repo-visible or manager-confirmed setup facts, plus explicit gaps that remain unresolved.
 
-## Scope of this report
+This report is intended to give `ui-integration`, `frontend`, `backend`, and `parity-qa` a single place to check:
 
-This report covers only platform-owned, repo-visible facts, including:
+- what is known ready at the platform layer
+- what prerequisites are still missing or unverified
+- what each team may proceed with now without relying on unstated assumptions
 
-- workspace structure
-- root/shared environment template presence
-- root scripts and baseline config status as reported to platform
-- explicit missing prerequisites that are not yet evidenced in platform-owned artifacts
+## Evidence rule
 
-This report does **not** assert:
+Every statement in this report is limited to one of the following:
 
-- application feature completeness
-- runtime success
-- endpoint behavior
-- deploy correctness
-- secret values
-- product semantics owned by other departments
+- a repository-visible platform responsibility already established in the workspace
+- a manager-confirmed status item from recent platform instructions
+- an explicit placeholder marking something not yet evidenced
 
-## Current evidenced baseline
+Anything not meeting that standard is listed as missing, unknown, or not yet evidenced.
 
-The following items are currently treated as present based on the manager brief for this round and prior platform setup status:
+## Known Ready
 
-- root workspace scripts exist
-- a baseline environment template/setup exists at the workspace level
-- platform is responsible for shared documentation and environment contract artifacts
-- this report and the local environment contract are now being created to make the baseline auditable and consumable
+The following items are currently evidenced enough for platform to report as ready:
 
-## Known ready now
+### 1. Shared environment documentation location
 
-### Workspace-level readiness
-
-Platform considers the following workspace-level conditions ready enough for downstream teams to reference:
-
-- a workspace root structure exists for department-owned work
-- root-level scripting baseline exists
-- baseline environment-template support exists
-- platform documentation is being established under `workspace/docs/`
-
-### Auditability readiness
-
-After this round, the following platform-owned documentation locations are expected to exist:
+Platform-owned environment documentation is established under:
 
 - `workspace/docs/environment-status-report.md`
 - `workspace/docs/local-environment-contract.md`
 
-These files provide a stable place to document:
+These files are the current shared source of truth for environment status and contract expectations at the platform layer.
 
-- what is evidenced
-- what is required but not yet supplied
-- what downstream teams may rely on today
-- what must still be confirmed elsewhere
+### 2. Root workspace environment baseline exists
 
-## Missing or not yet evidenced
+Per manager-confirmed status in recent rounds:
 
-The following items are **not** confirmed by platform from the current assignment context and should be treated as unresolved until evidenced in files or explicitly routed back through management:
+- root workspace scripts exist
+- baseline environment setup exists at the root/shared level
 
-### Secrets and real values
+This report does **not** expand those into specific script names, commands, or variable lists because those details were not provided as repo-visible evidence in the current assignment context.
 
-Not evidenced:
+### 3. Platform documentation gap is being addressed
 
-- actual secret values
-- developer-specific `.env` files
-- CI/CD secret injection mappings
-- production/staging credentials
-- third-party account provisioning status
+The manager identified that integration teams needed:
 
-### Runtime verification
+- explicit shared setup/status documentation
+- fuller config propagation guidance
 
-Not evidenced:
+This round fulfills the documentation portion by creating platform-owned status and contract docs in `workspace/docs/`.
 
-- successful local boot of frontend/backend
-- successful end-to-end integration runs
-- successful parity-QA execution
-- validated API connectivity between departments
-- validated database/cache/service availability
+### 4. Evidence-first reporting is now in place
 
-### Service-specific contracts
+The platform environment baseline now has a documented rule that:
 
-Not evidenced in this assignment context:
+- known facts are recorded as known facts
+- unresolved dependencies stay labeled as unresolved
+- teams should not treat undocumented assumptions as available guarantees
 
-- canonical port allocations for every service
-- required public/base URLs per app
-- authoritative list of all environment variables consumed by each department-owned service
-- fallback behavior when variables are missing
-- exact command expectations for each product surface
+## Missing Prerequisites
 
-### Infrastructure linkage
+The following items are still missing, not yet evidenced, or not yet detailed enough to serve as integration guarantees.
 
-Not evidenced:
+### 1. Exact root script inventory
 
-- deployment target configuration
-- container/orchestration assumptions
-- cloud resource bindings
-- preview/staging environment wiring
-- CI job-level execution guarantees
+Not yet evidenced in this document:
 
-## Team impact summary
+- root script names
+- script purposes
+- expected invocation order
+- whether scripts cover install, dev, test, or integration setup
 
-## `ui-integration`
+Placeholder status:
 
-Currently unblocked at the platform layer for:
+- `[missing evidence: exact root script list and usage]`
 
-- reading platform-owned docs under `workspace/docs/`
-- relying on the existence of a root-level environment baseline
-- identifying which prerequisites are still placeholders versus confirmed
+### 2. Exact env-template file inventory
 
-Still blocked or partially blocked on non-evidenced items such as:
+Not yet evidenced in this document:
 
-- concrete service URLs if not documented elsewhere
-- validated running backend/frontend instances
-- real credentials or tokens
-- any integration dependency that requires confirmed runtime behavior
+- exact env-template file path(s)
+- whether templates are root-only or service-specific
+- which teams must copy or fill them locally
 
-## `frontend`
+Placeholder status:
 
-Currently unblocked at the platform layer for:
+- `[missing evidence: exact env-template path(s) and expected usage]`
 
-- using the established workspace structure
-- referencing root-visible platform documentation
-- aligning requested env needs against the local environment contract
-- flagging missing variables or setup assumptions back through management
+### 3. Service-specific environment variable requirements
 
-Still blocked or partially blocked on non-evidenced items such as:
+Not yet evidenced here for any runnable surface:
 
-- confirmed backend availability
-- actual secret values
-- app-specific runtime validation
-- final service contract details not yet published in evidence-backed artifacts
+- frontend variables
+- backend variables
+- integration-only variables
+- QA-specific environment assumptions
+- required vs optional distinction
+- owner of each real value
 
-## `backend`
+Placeholder status:
 
-Currently unblocked at the platform layer for:
+- `[missing evidence: service-by-service variable matrix]`
 
-- using the workspace baseline and root scripts
-- comparing backend env requirements against the documented contract format
-- surfacing missing shared configuration dependencies in a standard location
+### 4. Canonical local runtime contract
 
-Still blocked or partially blocked on non-evidenced items such as:
+Not yet evidenced here:
 
-- provisioned external services
-- real credentials
-- verified local runtime connectivity
-- deployment/infrastructure mappings not evidenced here
+- startup commands per service
+- required local ports
+- base URLs
+- dependency order between services
+- ready/healthy signals
 
-## `parity-qa`
+Placeholder status:
 
-Currently unblocked at the platform layer for:
+- `[missing evidence: canonical local startup and runtime contract]`
 
-- using this report as the source of truth for what platform has actually confirmed
-- distinguishing repo-visible setup from unverified runtime claims
-- documenting test preconditions against the local environment contract
+### 5. Secret ownership and injection path
 
-Still blocked or partially blocked on non-evidenced items such as:
+Not yet evidenced here:
 
-- confirmed runnable environments
-- seeded data/state guarantees
-- credentialed access to external dependencies
-- stable endpoint/runtime verification
+- who provisions each secret
+- where local secrets should live
+- how CI/staging secrets map to local placeholders
+- which values are optional vs mandatory for local work
 
-## Required follow-ups
+Placeholder status:
 
-The following should be supplied or confirmed in future updates if teams need stronger guarantees:
+- `[missing evidence: secret ownership and injection guidance]`
 
-1. An evidenced list of required environment variables by service/app.
-2. Canonical local run commands for each active department-owned surface.
-3. Canonical port/base URL allocations.
-4. Secret ownership and injection path documentation without exposing values.
-5. Runtime verification results from the departments that own executable services.
-6. CI/staging/deploy environment mapping, if those environments are in scope.
+### 6. Runtime verification
 
-## Placeholder checklist
+Not evidenced by platform in this assignment context:
 
-Use this section to convert unknowns into evidence-backed facts as follow-up artifacts land.
+- successful local boot
+- successful frontend/backend connectivity
+- successful integration execution
+- successful QA execution
+- successful external dependency connectivity
 
-- [ ] Root env template path(s) explicitly listed here
-- [ ] Root script names explicitly listed here
-- [ ] Service-by-service env variable matrix published
-- [ ] Port/base URL matrix published
-- [ ] Local startup sequence documented
-- [ ] External dependency list documented
-- [ ] Secret ownership/injection flow documented
-- [ ] Runtime verification results linked
-- [ ] QA preconditions documented
+Placeholder status:
 
-## Evidence standard
+- `[missing evidence: runtime verification results]`
 
-A claim should be added to the “ready” baseline only when one of the following is true:
+## Team Unblock Notes
 
-- it is visible in a platform-owned file under `workspace/`
-- it is explicitly assigned and confirmed through management
-- it is documented by the owning department in an artifact platform can cite
+These notes describe only platform-layer unblock status. They do **not** imply application correctness or runtime success.
 
-Until then, this report should prefer “not yet evidenced” over assumption.
+### `ui-integration`
+
+Currently unblocked by platform for:
+
+- referencing a stable documentation location under `workspace/docs/`
+- using this report to separate confirmed setup from unknowns
+- requesting missing config/runtime details in evidence-backed form
+
+Still waiting on missing prerequisites for:
+
+- exact service URLs/ports
+- startup order
+- integration-specific variables
+- confirmation that dependent services run successfully together
+
+### `frontend`
+
+Currently unblocked by platform for:
+
+- relying on the presence of shared environment documentation
+- comparing frontend needs against the documented placeholder contract
+- escalating missing env details as explicit gaps rather than hidden assumptions
+
+Still waiting on missing prerequisites for:
+
+- exact frontend variable list
+- exact local run contract
+- confirmed backend dependency details where required
+- verified runtime behavior
+
+### `backend`
+
+Currently unblocked by platform for:
+
+- relying on shared environment documentation existing in a stable path
+- using the contract format to publish backend env requirements
+- surfacing backend-owned config/runtime needs in a repo-auditable way
+
+Still waiting on missing prerequisites for:
+
+- exact backend variable inventory
+- documented startup contract
+- documented dependency expectations
+- verified runtime status
+
+### `parity-qa`
+
+Currently unblocked by platform for:
+
+- using this report as the current evidence boundary
+- documenting QA blockers against named missing prerequisites
+- distinguishing setup gaps from product defects
+
+Still waiting on missing prerequisites for:
+
+- runnable environment confirmation
+- test precondition documentation
+- account/data/state assumptions
+- verified service availability and stable target URLs
+
+## Current integration-safe conclusion
+
+At the platform layer, the environment baseline is now documented and auditable, but still incomplete as a full integration source of truth.
+
+What teams may safely assume now:
+
+- shared environment documentation exists
+- a root-level script/env baseline is reported by management as present
+- unresolved setup details are intentionally called out rather than guessed
+
+What teams may **not** safely assume yet:
+
+- specific scripts, commands, ports, URLs, or variables
+- secret availability
+- successful service boot
+- successful cross-service integration
+- QA readiness
+
+## Open placeholders to resolve
+
+- [ ] exact root script names and descriptions
+- [ ] exact env-template file paths
+- [ ] frontend env variable list
+- [ ] backend env variable list
+- [ ] integration env/routing requirements
+- [ ] QA environment preconditions
+- [ ] ports and base URLs
+- [ ] startup order
+- [ ] ready/health indicators
+- [ ] secret ownership/injection mapping
+- [ ] runtime verification evidence
