@@ -1,0 +1,31 @@
+{
+  "company": "BriefLink",
+  "updatedAt": "2026-04-29T20:30:00Z",
+  "status": "ready_to_close",
+  "summary": "The BriefLink MVP slice is in final walkthrough closure. The remaining track is narrow: confirm the final assembled demo package so the handoff can be declared closed.",
+  "checks": [
+    {
+      "name": "user-flow walkthrough complete",
+      "status": "accepted",
+      "summary": "The walkthrough baseline is on disk across the current MVP flow, with frontend and backend demo-handoff artifacts landed and backend handoff accepted."
+    },
+    {
+      "name": "product promise / brand alignment complete",
+      "status": "in_progress",
+      "summary": "Brand walkthrough material is on disk and the company is in closure mode, but explicit final acceptance of the unified product-promise/brand layer is not yet evidenced in the provided board snapshot."
+    },
+    {
+      "name": "demo-ready package assembled",
+      "status": "in_progress",
+      "summary": "The package is near closure, but final confirmation that the walkthrough, promise/alignment layer, and handoff materials are assembled into one demo-ready package is still pending."
+    }
+  ],
+  "blockers": [
+    "Final acceptance of the unified product-promise/brand alignment for the walkthrough.",
+    "Final confirmation that the assembled package is ready for demo handoff."
+  ],
+  "closureReadyWhen": [
+    "Product promise / brand alignment is explicitly accepted.",
+    "The assembled walkthrough package is confirmed ready for demo handoff."
+  ]
+}

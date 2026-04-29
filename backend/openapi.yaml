@@ -1,0 +1,188 @@
+openapi: 3.1.0
+info:
+  title: BriefLink Backend API
+  version: 1.0.0
+  description: Minimal versioned API contract for MVP brief generation.
+servers:
+  - url: http://localhost:3000
+paths:
+  /api/v1/status:
+    get:
+      summary: Service health check
+      operationId: getStatus
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatusResponse'
+  /api/v1/briefs:
+    post:
+      summary: Generate an account brief
+      operationId: createBrief
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBriefRequest'
+      responses:
+        '201':
+          description: Brief generated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateBriefResponse'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Unexpected server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    StatusResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - success
+        - data
+        - error
+      properties:
+        success:
+          type: boolean
+          const: true
+        data:
+          type: object
+          additionalProperties: false
+          required:
+            - service
+            - version
+            - status
+          properties:
+            service:
+              type: string
+              example: brieflink-backend
+            version:
+              type: string
+              example: 1.0.0
+            status:
+              type: string
+              example: ok
+        error:
+          type: 'null'
+
+    CreateBriefRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - accountName
+        - websiteUrl
+      properties:
+        accountName:
+          type: string
+          minLength: 1
+          maxLength: 200
+        websiteUrl:
+          type: string
+          format: uri
+        notes:
+          type: string
+          maxLength: 4000
+
+    Brief:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - version
+        - accountName
+        - websiteUrl
+        - notes
+        - summary
+        - createdAt
+      properties:
+        id:
+          type: string
+        version:
+          type: string
+          example: mvp-v1
+        accountName:
+          type: string
+        websiteUrl:
+          type: string
+          format: uri
+        notes:
+          type: string
+        summary:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+
+    CreateBriefResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - success
+        - data
+        - error
+      properties:
+        success:
+          type: boolean
+          const: true
+        data:
+          type: object
+          additionalProperties: false
+          required:
+            - brief
+          properties:
+            brief:
+              $ref: '#/components/schemas/Brief'
+        error:
+          type: 'null'
+
+    ErrorResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - success
+        - data
+        - error
+      properties:
+        success:
+          type: boolean
+          const: false
+        data:
+          type: 'null'
+        error:
+          type: object
+          additionalProperties: false
+          required:
+            - code
+            - message
+            - details
+          properties:
+            code:
+              type: string
+              example: VALIDATION_ERROR
+            message:
+              type: string
+              example: Request validation failed.
+            details:
+              oneOf:
+                - type: 'null'
+                - type: object
+                  additionalProperties: true
+                - type: array
+                  items:
+                    type: object
+                    additionalProperties: true

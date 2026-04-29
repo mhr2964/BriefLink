@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>BriefLink</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="hero">
+      <p class="eyebrow">BriefLink</p>
+      <h1>Turn source material into calm, shareable briefs.</h1>
+      <p class="lede">Paste source text, generate a brief, and review the result in one quiet workspace.</p>
+    </header>
+
+    <section class="panel" aria-labelledby="input-title">
+      <div class="panel-head">
+        <h2 id="input-title">New brief</h2>
+        <p class="muted">Start with pasted source material.</p>
+      </div>
+
+      <form id="brief-form" class="stack">
+        <label for="source-text">Source text</label>
+        <textarea
+          id="source-text"
+          name="source"
+          rows="10"
+          placeholder="Paste notes, call transcript, article text, or other source material."
+        ></textarea>
+        <p id="form-message" class="message" role="status" aria-live="polite"></p>
+        <div class="actions">
+          <button id="submit-button" type="submit">Generate brief</button>
+          <button id="reset-button" type="button" class="secondary">Clear</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="panel" aria-labelledby="result-title">
+      <div class="panel-head">
+        <h2 id="result-title">Result</h2>
+        <p class="muted">Generated output appears here.</p>
+      </div>
+      <div id="result" class="result empty" aria-live="polite">
+        <p class="placeholder">No brief yet. Submit source text to generate a result.</p>
+      </div>
+    </section>
+  </main>
+
+  <script src="./app.js"></script>
+</body>
+</html>

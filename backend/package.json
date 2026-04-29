@@ -1,0 +1,16 @@
+{
+  "name": "brieflink-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Minimal runnable backend foundation for BriefLink MVP",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

@@ -1,0 +1,224 @@
+{
+  "project": "BriefLink",
+  "artifact": "proto-flow",
+  "version": "2.0",
+  "status": "canonical-additive-update",
+  "updatedAt": "2026-04-29T21:12:00Z",
+  "lockedMvp": {
+    "entry": "create",
+    "baselineFlow": [
+      "create",
+      "create-brief",
+      "share",
+      "review"
+    ],
+    "note": "Existing canon remains locked. This update adds the Create Brief from Link path without replacing the baseline source-text path."
+  },
+  "featureSlice": {
+    "name": "Create Brief from Link",
+    "goal": "Let an operator paste a company or source URL, generate a brief draft, review the result, and share it.",
+    "entryPoint": "create",
+    "variant": "link-input"
+  },
+  "userFlow": {
+    "primaryPath": [
+      {
+        "id": "create",
+        "action": "User selects link as input mode and pastes a valid URL."
+      },
+      {
+        "id": "create-brief",
+        "action": "User submits the URL to generate a brief."
+      },
+      {
+        "id": "review",
+        "action": "User reviews generated brief content and metadata."
+      },
+      {
+        "id": "share",
+        "action": "User shares or copies the resulting brief."
+      }
+    ],
+    "successStates": [
+      {
+        "id": "link-accepted",
+        "description": "Valid-looking URL is accepted and the submit action is enabled."
+      },
+      {
+        "id": "generation-success",
+        "description": "Brief draft is generated from the provided link and shown in review."
+      },
+      {
+        "id": "share-success",
+        "description": "User can copy or otherwise share the generated brief."
+      }
+    ],
+    "errorStates": [
+      {
+        "id": "invalid-link",
+        "description": "Entered value is empty, malformed, or not accepted as a URL."
+      },
+      {
+        "id": "fetch-failed",
+        "description": "The system cannot retrieve or process content from the link."
+      },
+      {
+        "id": "generation-failed",
+        "description": "The system accepts the URL but fails to produce a brief draft."
+      },
+      {
+        "id": "empty-result",
+        "description": "The system completes processing but returns insufficient content for a usable brief."
+      }
+    ]
+  },
+  "screens": [
+    {
+      "id": "create",
+      "title": "Create Brief",
+      "purpose": "Entry screen where the user chooses input type and provides source material.",
+      "elements": [
+        "Input mode selector with source-text and link options",
+        "URL input field for Create Brief from Link",
+        "Primary create brief action",
+        "Inline validation and error messaging"
+      ],
+      "states": [
+        "default",
+        "link-mode-selected",
+        "valid-link",
+        "invalid-link",
+        "submitting"
+      ]
+    },
+    {
+      "id": "create-brief",
+      "title": "Brief Generation",
+      "purpose": "System processing state after user submits a valid link.",
+      "elements": [
+        "Loading or progress indicator",
+        "Submitted source reference",
+        "Retry or return path on failure"
+      ],
+      "states": [
+        "loading",
+        "fetch-failed",
+        "generation-failed",
+        "empty-result",
+        "success"
+      ]
+    },
+    {
+      "id": "review",
+      "title": "Review Brief",
+      "purpose": "User inspects generated brief before sharing.",
+      "elements": [
+        "Brief title or company identifier",
+        "Generated summary/body content",
+        "Source reference",
+        "Share action",
+        "Back or regenerate action"
+      ],
+      "states": [
+        "review-ready",
+        "content-truncated-warning",
+        "missing-sections-warning"
+      ]
+    },
+    {
+      "id": "share",
+      "title": "Share Brief",
+      "purpose": "User copies or sends the generated brief.",
+      "elements": [
+        "Copy/share action",
+        "Confirmation feedback",
+        "Return to review or create another brief action"
+      ],
+      "states": [
+        "ready-to-share",
+        "share-success",
+        "share-failed"
+      ]
+    }
+  ],
+  "stateInventory": {
+    "inputMode": [
+      "source-text",
+      "link"
+    ],
+    "createScreen": [
+      "idle",
+      "link-empty",
+      "link-invalid",
+      "link-valid",
+      "submit-disabled",
+      "submit-enabled"
+    ],
+    "generation": [
+      "not-started",
+      "in-progress",
+      "fetch-failed",
+      "generation-failed",
+      "empty-result",
+      "completed"
+    ],
+    "review": [
+      "not-available",
+      "ready",
+      "warning-partial-content"
+    ],
+    "share": [
+      "not-started",
+      "ready",
+      "success",
+      "failed"
+    ]
+  },
+  "acceptanceCriteria": [
+    {
+      "id": "ac-link-entry",
+      "text": "From the Create Brief entry screen, the user can select link input mode and see a dedicated URL input."
+    },
+    {
+      "id": "ac-link-validation",
+      "text": "The create action stays disabled or blocked until the entered value is recognized as a valid-looking URL, and invalid input shows inline feedback."
+    },
+    {
+      "id": "ac-submit-link",
+      "text": "Submitting a valid URL moves the user into a generation state that clearly indicates processing is underway."
+    },
+    {
+      "id": "ac-generation-success",
+      "text": "When generation succeeds, the user is taken to review with a populated brief draft derived from the link."
+    },
+    {
+      "id": "ac-review-source",
+      "text": "The review screen preserves the source reference so the user can understand what link produced the brief."
+    },
+    {
+      "id": "ac-share-path",
+      "text": "From review, the user can complete the share step without re-entering the link."
+    },
+    {
+      "id": "ac-invalid-link-error",
+      "text": "If the user enters an invalid URL, the system shows a specific validation error and does not start generation."
+    },
+    {
+      "id": "ac-fetch-failure",
+      "text": "If the link cannot be fetched or processed, the system shows an actionable error state with a retry or return path."
+    },
+    {
+      "id": "ac-generation-failure",
+      "text": "If processing fails after accepting the URL, the system surfaces a generation failure state distinct from invalid input."
+    },
+    {
+      "id": "ac-empty-result",
+      "text": "If the link yields too little usable content, the system shows an empty-result state rather than presenting a misleadingly complete brief."
+    }
+  ],
+  "notes": [
+    "This is an additive product-definition update to the locked canonical MVP flow.",
+    "The baseline source-text flow remains in scope and unchanged.",
+    "Create Brief from Link introduces a parallel entry path from the same create screen, converging back into review and share."
+  ]
+}
