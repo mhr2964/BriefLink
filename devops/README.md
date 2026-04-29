@@ -1,26 +1,25 @@
 # BriefLink
 
-DevOps artifact set for BriefLink, targeting Vercel hosting with Supabase services.
+Staged DevOps docs for BriefLink.
 
 ## Repository
 
 - GitHub: `https://github.com/mhr2964/BriefLink.git`
 
-## Included files
+## Planning-only deployment targets
 
-- `README.md`
-- `.gitignore`
-- `.env.example`
-- `deploy-plan.md`
+- Frontend target: Vercel
+- Preview URL: `https://brieflink-preview.vercel.app`
+- Public URL: `https://app.brieflink.app`
+- API origin: `https://api.brieflink.app`
+
+These are planning placeholders only. Provisioning, DNS, environment injection, certificates, and runtime execution remain unverified.
 
 ## Local run
 
-1. Copy the example env file into the app's local env file:
-   ```bash
-   cp workspace/devops/.env.example .env.local
-   ```
+1. Copy `workspace/devops/.env.example` to the app's local env file, usually `.env.local`.
 2. Fill in real local values.
 3. From the repository root, install dependencies.
-4. From the repository root, start the development server.
+4. From the repository root, run the dev server.
 
 Example:

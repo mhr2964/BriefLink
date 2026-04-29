@@ -1,108 +1,172 @@
 export type BriefDraftStatus = 'draft' | 'ready' | 'shared';
-export type MonitoringStage = 'live' | 'waiting-for-reply' | 'first-reply-received';
 
 export type BriefDraft = {
   id: string;
+  slug: string;
   title: string;
-  summary: string;
-  audience: string;
-  goals: string[];
-  tone: string;
+  shareUrl: string;
   status: BriefDraftStatus;
+  companyName: string;
+  website: string;
+  notes: string;
+  goals: string;
+  accountBrief: string;
+  riskFlags: string[];
+  prepNotes: string[];
 };
 
-export type MonitoringTimelineItem = {
-  id: string;
-  label: string;
-  detail: string;
-  timestampLabel: string;
+type DraftInput = {
+  companyName: string;
+  website: string;
+  notes: string;
+  goals: string;
+  slug?: string;
 };
 
-export type MonitoringGuidance = {
-  id: string;
-  title: string;
-  detail: string;
-};
+type DraftRecord = Record<string, BriefDraft>;
 
-export type ActivatedBriefMonitoring = {
-  briefId: string;
-  stage: MonitoringStage;
-  stageLabel: string;
-  sharedAtLabel: string;
-  activatedStatusLabel: string;
-  primarySignal: string;
-  recipientSummary: string;
-  timeline: MonitoringTimelineItem[];
-  guidance: MonitoringGuidance[];
-};
+const STORAGE_KEY = 'brieflink-brief-drafts';
+const SHARE_BASE_PATH = '/b/';
 
-export type BriefDraftStore = {
-  draft: BriefDraft;
-  monitoring: ActivatedBriefMonitoring | null;
-};
+function getStorage(): Storage | null {
+  if (typeof window === 'undefined') {
+    return null;
+  }
 
-const defaultDraft: BriefDraft = {
-  id: 'brief-001',
-  title: 'Q2 customer story campaign',
-  summary:
-    'A concise brief for launching a customer evidence campaign across sales and lifecycle marketing.',
-  audience: 'Sales and lifecycle leads',
-  goals: ['Align narrative', 'Improve reuse', 'Speed up stakeholder review'],
-  tone: 'Calm and clear',
-  status: 'shared',
-};
+  return window.localStorage;
+}
 
-const defaultActivatedBriefMonitoring: ActivatedBriefMonitoring = {
-  briefId: 'brief-001',
-  stage: 'first-reply-received',
-  stageLabel: 'First reply received',
-  sharedAtLabel: 'Shared 18 minutes ago',
-  activatedStatusLabel: 'Brief is live',
-  primarySignal: 'One recipient has replied with a request for two extra customer examples.',
-  recipientSummary:
-    '12 recipients received the brief. Early engagement is concentrated in the core sales group.',
-  timeline: [
-    {
-      id: 'timeline-1',
-      label: 'Brief is live',
-      detail: 'The share link was activated for the selected recipients.',
-      timestampLabel: '18 minutes ago',
-    },
-    {
-      id: 'timeline-2',
-      label: 'Waiting for reply',
-      detail: 'The first opens arrived and the brief began circulating quietly.',
-      timestampLabel: '11 minutes ago',
-    },
-    {
-      id: 'timeline-3',
-      label: 'First reply received',
-      detail:
-        'A sales manager replied asking for two additional examples before forwarding it.',
-      timestampLabel: '4 minutes ago',
-    },
-  ],
-  guidance: [
-    {
-      id: 'guidance-1',
-      title: 'Respond while attention is fresh',
-      detail:
-        'A short reply with the requested examples should help the brief keep moving without broadening the thread.',
-    },
-    {
-      id: 'guidance-2',
-      title: 'Keep the audience tight',
-      detail:
-        'The current group is engaged enough to learn from before sending the brief wider.',
-    },
-  ],
-};
+function createFallbackDrafts(): DraftRecord {
+  const seed = createReadyDraft({
+    companyName: 'Northstar Health',
+    website: 'https://northstarhealth.example',
+    notes:
+      'Series B health operations company expanding into enterprise accounts. Team needs a fast meeting-prep brief before partner outreach.',
+    goals: 'Prepare leadership for partner outreach and surface likely risks before the first meeting.',
+    slug: 'northstar-health-brief',
+  });
 
-const store: BriefDraftStore = {
-  draft: defaultDraft,
-  monitoring: defaultActivatedBriefMonitoring,
-};
+  return {
+    [seed.slug]: seed,
+  };
+}
 
-export function getBriefDraftStore(): BriefDraftStore {
-  return store;
+function readDrafts(): DraftRecord {
+  const storage = getStorage();
+
+  if (!storage) {
+    return createFallbackDrafts();
+  }
+
+  const rawValue = storage.getItem(STORAGE_KEY);
+
+  if (!rawValue) {
+    const fallbackDrafts = createFallbackDrafts();
+    storage.setItem(STORAGE_KEY, JSON.stringify(fallbackDrafts));
+    return fallbackDrafts;
+  }
+
+  try {
+    const parsed = JSON.parse(rawValue) as DraftRecord;
+    return parsed && typeof parsed === 'object' ? parsed : createFallbackDrafts();
+  } catch {
+    return createFallbackDrafts();
+  }
+}
+
+function writeDrafts(drafts: DraftRecord) {
+  const storage = getStorage();
+
+  if (!storage) {
+    return;
+  }
+
+  storage.setItem(STORAGE_KEY, JSON.stringify(drafts));
+}
+
+export function buildSlug(value: string): string {
+  return value
+    .toLowerCase()
+    .trim()
+    .replace(/https?:\/\//g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 60);
+}
+
+export function buildShareUrl(slug: string): string {
+  return `${window.location.origin}${SHARE_BASE_PATH}${slug}`;
+}
+
+function buildRiskFlags(notes: string, goals: string): string[] {
+  const normalizedSource = `${notes} ${goals}`.toLowerCase();
+  const flags: string[] = [];
+
+  if (normalizedSource.includes('enterprise')) {
+    flags.push('Enterprise stakeholder alignment may slow approvals.');
+  }
+
+  if (normalizedSource.includes('partner')) {
+    flags.push('Partner-facing messaging may need legal or procurement review.');
+  }
+
+  if (normalizedSource.includes('series b')) {
+    flags.push('Recent growth-stage changes could create moving ownership across teams.');
+  }
+
+  if (flags.length === 0) {
+    flags.push('Limited source material provided; validate assumptions before external sharing.');
+  }
+
+  return flags;
+}
+
+function buildPrepNotes(companyName: string, website: string): string[] {
+  return [
+    `Confirm the latest positioning and proof points on ${website}.`,
+    `Open the meeting by anchoring on ${companyName}'s current priorities and desired outcome.`,
+    'Bring one concrete next-step recommendation so the brief leads into action.',
+  ];
+}
+
+function createReadyDraft(input: DraftInput): BriefDraft {
+  const slug = buildSlug(input.slug || input.companyName || input.website || 'brief');
+  const trimmedCompanyName = input.companyName.trim();
+  const trimmedWebsite = input.website.trim();
+  const trimmedNotes = input.notes.trim();
+  const trimmedGoals = input.goals.trim();
+
+  return {
+    id: `brief-${slug}`,
+    slug,
+    title: `${trimmedCompanyName} account brief`,
+    shareUrl: buildShareUrl(slug),
+    status: 'ready',
+    companyName: trimmedCompanyName,
+    website: trimmedWebsite,
+    notes: trimmedNotes,
+    goals: trimmedGoals,
+    accountBrief: `${trimmedCompanyName} appears to be a strong fit for a prep-first outreach motion. Use this brief to align on company context, surface likely concerns early, and walk into the next conversation already prepared.`,
+    riskFlags: buildRiskFlags(trimmedNotes, trimmedGoals),
+    prepNotes: buildPrepNotes(trimmedCompanyName, trimmedWebsite),
+  };
+}
+
+export function saveDraft(input: DraftInput): BriefDraft {
+  const drafts = readDrafts();
+  const draft = createReadyDraft(input);
+
+  drafts[draft.slug] = draft;
+  writeDrafts(drafts);
+
+  return draft;
+}
+
+export function getDraft(slug: string): BriefDraft | null {
+  const drafts = readDrafts();
+  return drafts[slug] ?? null;
+}
+
+export function listDrafts(): BriefDraft[] {
+  return Object.values(readDrafts());
 }

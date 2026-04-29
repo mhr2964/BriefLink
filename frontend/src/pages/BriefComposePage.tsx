@@ -3,46 +3,51 @@ import { useNavigate } from 'react-router-dom';
 import { buildShareUrl, buildSlug, saveDraft } from '../lib/briefDraftStore';
 
 type BriefFormState = {
-  title: string;
-  audience: string;
-  objective: string;
-  keyPoints: string;
-  cta: string;
+  companyName: string;
+  website: string;
+  notes: string;
+  goals: string;
   slug: string;
 };
 
 type FieldErrors = Partial<Record<keyof BriefFormState, string>>;
 
 const initialState: BriefFormState = {
-  title: '',
-  audience: '',
-  objective: '',
-  keyPoints: '',
-  cta: '',
+  companyName: '',
+  website: '',
+  notes: '',
+  goals: '',
   slug: '',
 };
+
+function validateWebsite(value: string): boolean {
+  try {
+    const parsed = new URL(value);
+    return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+  } catch {
+    return false;
+  }
+}
 
 function validateForm(values: BriefFormState) {
   const errors: FieldErrors = {};
 
-  if (!values.title.trim()) {
-    errors.title = 'Add a concise title so the brief has a clear anchor.';
+  if (!values.companyName.trim()) {
+    errors.companyName = 'Add the company name you are preparing for.';
   }
 
-  if (!values.audience.trim()) {
-    errors.audience = 'Name the audience to keep the message grounded.';
+  if (!values.website.trim()) {
+    errors.website = 'Add the company website URL for the URL-based intake path.';
+  } else if (!validateWebsite(values.website.trim())) {
+    errors.website = 'Enter a valid http:// or https:// website URL.';
   }
 
-  if (!values.objective.trim()) {
-    errors.objective = 'Add the primary objective for this brief.';
+  if (!values.notes.trim()) {
+    errors.notes = 'Add operator notes to capture the available source context.';
   }
 
-  if (!values.keyPoints.trim()) {
-    errors.keyPoints = 'Capture at least one key point to share.';
-  }
-
-  if (!values.cta.trim()) {
-    errors.cta = 'Add a next step so readers know what to do.';
+  if (!values.goals.trim()) {
+    errors.goals = 'Add the prep goal for this generated brief.';
   }
 
   if (!values.slug.trim()) {
@@ -59,18 +64,18 @@ export function BriefComposePage() {
   const [formState, setFormState] = useState<BriefFormState>(initialState);
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [slugEdited, setSlugEdited] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submissionState, setSubmissionState] = useState<'idle' | 'loading' | 'success'>('idle');
 
   const slugPreview = useMemo(() => {
-    const nextSlug = formState.slug.trim() || buildSlug(formState.title);
-    return buildShareUrl(nextSlug);
-  }, [formState.slug, formState.title]);
+    const nextSlug = formState.slug.trim() || buildSlug(formState.companyName);
+    return nextSlug ? buildShareUrl(nextSlug) : 'Add a company name or custom slug to preview';
+  }, [formState.slug, formState.companyName]);
 
   function updateField(field: keyof BriefFormState, value: string) {
     setFormState((current) => {
       const nextState = { ...current, [field]: value };
 
-      if (field === 'title' && !slugEdited) {
+      if (field === 'companyName' && !slugEdited) {
         nextState.slug = buildSlug(value);
       }
 
@@ -80,8 +85,8 @@ export function BriefComposePage() {
     setFieldErrors((current) => ({ ...current, [field]: undefined }));
   }
 
-  function handleTitleChange(event: ChangeEvent<HTMLInputElement>) {
-    updateField('title', event.target.value);
+  function handleCompanyNameChange(event: ChangeEvent<HTMLInputElement>) {
+    updateField('companyName', event.target.value);
   }
 
   function handleSlugChange(event: ChangeEvent<HTMLInputElement>) {
@@ -91,32 +96,27 @@ export function BriefComposePage() {
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setIsSubmitting(true);
+    setSubmissionState('loading');
 
     const normalizedState = {
-      ...formState,
-      title: formState.title.trim(),
-      audience: formState.audience.trim(),
-      objective: formState.objective.trim(),
-      keyPoints: formState.keyPoints.trim(),
-      cta: formState.cta.trim(),
-      slug: buildSlug(formState.slug || formState.title),
+      companyName: formState.companyName.trim(),
+      website: formState.website.trim(),
+      notes: formState.notes.trim(),
+      goals: formState.goals.trim(),
+      slug: buildSlug(formState.slug || formState.companyName),
     };
 
     const errors = validateForm(normalizedState);
     setFieldErrors(errors);
 
     if (Object.keys(errors).length > 0) {
-      setIsSubmitting(false);
+      setSubmissionState('idle');
       return;
     }
 
-    const savedDraft = saveDraft({
-      ...normalizedState,
-      status: 'draft',
-    });
-
-    navigate(`/briefs/${savedDraft.slug}/confirm`);
+    const savedDraft = saveDraft(normalizedState);
+    setSubmissionState('success');
+    navigate(`/briefs/${savedDraft.slug}/success`);
   }
 
   const hasValidationErrors = Object.keys(fieldErrors).length > 0;
@@ -124,17 +124,43 @@ export function BriefComposePage() {
   return (
     <section className="brief-page brief-page--compose">
       <div className="brief-page__intro">
-        <p className="eyebrow">Compose</p>
-        <h2 className="brief-page__title">Create brief</h2>
+        <p className="eyebrow">Ingestion</p>
+        <h2 className="brief-page__title">Create an account brief</h2>
         <p className="brief-page__copy">
-          Gather the essentials now. The prototype keeps drafts in local browser storage until
-          backend persistence is connected.
+          This MVP shell supports a low-friction intake path: company URL plus manual operator
+          notes. File upload and external system sync are intentionally excluded because they are
+          not supported by visible artifacts.
         </p>
       </div>
 
-      {isSubmitting ? (
+      <div className="ingestion-mode-grid">
+        <div className="brief-card ingestion-mode ingestion-mode--active">
+          <span className="brief-card__label">Supported now</span>
+          <h3>URL + manual notes</h3>
+          <p className="brief-page__copy">
+            Capture a company website, working notes, and prep goals, then generate a readable
+            account brief.
+          </p>
+        </div>
+        <div className="brief-card ingestion-mode">
+          <span className="brief-card__label">Not in this MVP shell</span>
+          <h3>Upload or sync sources</h3>
+          <p className="brief-page__copy">
+            Automated ingestion from scattered systems is not shown in the current contract-backed
+            prototype.
+          </p>
+        </div>
+      </div>
+
+      {submissionState === 'loading' ? (
         <div className="brief-banner brief-banner--info" aria-live="polite">
-          Saving your brief draft…
+          Generating your brief from the provided source inputs…
+        </div>
+      ) : null}
+
+      {submissionState === 'success' ? (
+        <div className="brief-banner brief-banner--info" aria-live="polite">
+          Brief generated successfully. Opening the readable brief view…
         </div>
       ) : null}
 
@@ -146,86 +172,71 @@ export function BriefComposePage() {
 
       <form className="brief-form" onSubmit={handleSubmit} noValidate>
         <label className="brief-field">
-          <span className="brief-field__label">Title</span>
+          <span className="brief-field__label">Company name</span>
           <input
             className="brief-field__input"
-            name="title"
-            value={formState.title}
-            onChange={handleTitleChange}
-            placeholder="Q2 launch brief"
-            aria-invalid={fieldErrors.title ? 'true' : 'false'}
+            name="companyName"
+            value={formState.companyName}
+            onChange={handleCompanyNameChange}
+            placeholder="Northstar Health"
+            aria-invalid={fieldErrors.companyName ? 'true' : 'false'}
           />
-          {fieldErrors.title ? <span className="brief-field__error">{fieldErrors.title}</span> : null}
-        </label>
-
-        <label className="brief-field">
-          <span className="brief-field__label">Audience</span>
-          <input
-            className="brief-field__input"
-            name="audience"
-            value={formState.audience}
-            onChange={(event) => updateField('audience', event.target.value)}
-            placeholder="Sales leadership"
-            aria-invalid={fieldErrors.audience ? 'true' : 'false'}
-          />
-          {fieldErrors.audience ? (
-            <span className="brief-field__error">{fieldErrors.audience}</span>
+          {fieldErrors.companyName ? (
+            <span className="brief-field__error">{fieldErrors.companyName}</span>
           ) : null}
         </label>
 
         <label className="brief-field">
-          <span className="brief-field__label">Objective</span>
+          <span className="brief-field__label">Company website</span>
+          <input
+            className="brief-field__input"
+            name="website"
+            value={formState.website}
+            onChange={(event) => updateField('website', event.target.value)}
+            placeholder="https://northstarhealth.example"
+            aria-invalid={fieldErrors.website ? 'true' : 'false'}
+          />
+          {fieldErrors.website ? (
+            <span className="brief-field__error">{fieldErrors.website}</span>
+          ) : null}
+        </label>
+
+        <label className="brief-field">
+          <span className="brief-field__label">Operator notes</span>
           <textarea
             className="brief-field__textarea"
-            name="objective"
-            value={formState.objective}
-            onChange={(event) => updateField('objective', event.target.value)}
-            placeholder="Align on the message, timing, and approval path."
+            name="notes"
+            value={formState.notes}
+            onChange={(event) => updateField('notes', event.target.value)}
+            placeholder="Summarize current company context, available proof, timing, stakeholders, and anything that matters before outreach or a meeting."
+            rows={6}
+            aria-invalid={fieldErrors.notes ? 'true' : 'false'}
+          />
+          {fieldErrors.notes ? <span className="brief-field__error">{fieldErrors.notes}</span> : null}
+        </label>
+
+        <label className="brief-field">
+          <span className="brief-field__label">Prep goal</span>
+          <textarea
+            className="brief-field__textarea"
+            name="goals"
+            value={formState.goals}
+            onChange={(event) => updateField('goals', event.target.value)}
+            placeholder="Prepare the team for the first partner call and highlight the biggest concerns to address before sharing externally."
             rows={4}
-            aria-invalid={fieldErrors.objective ? 'true' : 'false'}
+            aria-invalid={fieldErrors.goals ? 'true' : 'false'}
           />
-          {fieldErrors.objective ? (
-            <span className="brief-field__error">{fieldErrors.objective}</span>
-          ) : null}
+          {fieldErrors.goals ? <span className="brief-field__error">{fieldErrors.goals}</span> : null}
         </label>
 
         <label className="brief-field">
-          <span className="brief-field__label">Key points</span>
-          <textarea
-            className="brief-field__textarea"
-            name="keyPoints"
-            value={formState.keyPoints}
-            onChange={(event) => updateField('keyPoints', event.target.value)}
-            placeholder={'• Launch date\n• Target segment\n• Risks to watch'}
-            rows={5}
-            aria-invalid={fieldErrors.keyPoints ? 'true' : 'false'}
-          />
-          {fieldErrors.keyPoints ? (
-            <span className="brief-field__error">{fieldErrors.keyPoints}</span>
-          ) : null}
-        </label>
-
-        <label className="brief-field">
-          <span className="brief-field__label">Call to action</span>
-          <input
-            className="brief-field__input"
-            name="cta"
-            value={formState.cta}
-            onChange={(event) => updateField('cta', event.target.value)}
-            placeholder="Review and confirm by Thursday"
-            aria-invalid={fieldErrors.cta ? 'true' : 'false'}
-          />
-          {fieldErrors.cta ? <span className="brief-field__error">{fieldErrors.cta}</span> : null}
-        </label>
-
-        <label className="brief-field">
-          <span className="brief-field__label">Link slug</span>
+          <span className="brief-field__label">Share link slug</span>
           <input
             className="brief-field__input"
             name="slug"
             value={formState.slug}
             onChange={handleSlugChange}
-            placeholder="q2-launch-brief"
+            placeholder="northstar-health-brief"
             aria-invalid={fieldErrors.slug ? 'true' : 'false'}
           />
           <span className="brief-field__hint">Preview: {slugPreview}</span>
@@ -234,7 +245,7 @@ export function BriefComposePage() {
 
         <div className="brief-form__actions">
           <button className="button button--primary" type="submit">
-            Create brief
+            Generate brief
           </button>
         </div>
       </form>
