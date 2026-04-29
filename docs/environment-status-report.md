@@ -1,134 +1,201 @@
-# BriefLink Environment Status Report
+# Environment Status Report
 
-_Last reviewed against current workspace artifacts: `backend/README.md`, `backend/package.json`, `backend/src/app.js`, `backend/src/index.js`, `frontend/package.json`, `devops/README.md`, `devops/deploy-plan.md`, `README.md`._
+_Last updated by platform on this round._
 
-## Current status
+## Purpose
 
-**Environment usability:** partial / demo-capable, not yet integration-ready by default.
+This report records the current workspace-level environment baseline that platform can evidence directly from repository-owned files and prior platform setup notes. It is intended to help `ui-integration`, `frontend`, `backend`, and `parity-qa` understand what is currently available, what is still missing, and which gaps require follow-up before full local/integration confidence is possible.
 
-- **Backend** has a runnable Express service shape with a health endpoint and API routes.
-- **Frontend** has a runnable Vite app shape.
-- **DevOps** has a deployment plan and environment expectations documented at a high level.
-- **Workspace root** does **not** yet provide a single platform-owned setup contract for local app/API parity.
-- **Cross-service defaults** are underspecified: API base URL, required env vars, local ports, and startup order are not centralized.
-- **Result:** individual teams can run pieces, but UI-integration and parity-QA do not yet have a platform-owned “do this exactly” environment baseline.
+## Scope of this report
 
-## Run prerequisites
+This report covers only platform-owned, repo-visible facts, including:
 
-### Backend
-From `backend/package.json` and source:
-- Requires **Node.js** with npm.
-- Expected start commands exist in backend package metadata.
-- Service entrypoint is `src/index.js`.
-- App definition is in `src/app.js`.
+- workspace structure
+- root/shared environment template presence
+- root scripts and baseline config status as reported to platform
+- explicit missing prerequisites that are not yet evidenced in platform-owned artifacts
 
-### Frontend
-From `frontend/package.json`:
-- Requires **Node.js** with npm.
-- Vite-based local dev workflow is implied.
-- Frontend likely expects an API endpoint configuration, but that contract is not centralized in platform-owned docs yet.
+This report does **not** assert:
 
-### Shared local requirements
-- npm installed
-- separate dependency install in `workspace/backend` and `workspace/frontend`
-- two terminals or process manager for concurrent local run
+- application feature completeness
+- runtime success
+- endpoint behavior
+- deploy correctness
+- secret values
+- product semantics owned by other departments
 
-## Config / secrets expectations
+## Current evidenced baseline
 
-## What is clear
-DevOps docs indicate the stack expects environment-based configuration for deployment/runtime.
+The following items are currently treated as present based on the manager brief for this round and prior platform setup status:
 
-## What is missing or not yet platform-centralized
-The reviewed files do not provide one authoritative cross-workspace contract for:
-- required backend environment variables
-- required frontend environment variables
-- default local values
-- which values are secrets vs safe local defaults
-- canonical API origin for local integration
-- production/staging placeholder names for future deploy targets
+- root workspace scripts exist
+- a baseline environment template/setup exists at the workspace level
+- platform is responsible for shared documentation and environment contract artifacts
+- this report and the local environment contract are now being created to make the baseline auditable and consumable
 
-## Practical current expectation
-Based on the artifacts reviewed, the environment appears to need at least:
-- backend port
-- frontend API base URL or equivalent
-- optional node environment mode
+## Known ready now
 
-Because those expectations are not fully standardized in a platform-owned file, this is currently a **read-the-dept-files** setup rather than a stable shared environment contract.
+### Workspace-level readiness
 
-## Service connectivity
+Platform considers the following workspace-level conditions ready enough for downstream teams to reference:
 
-## Backend service
-`backend/src/app.js` and `backend/src/index.js` indicate:
-- Express app is composed separately from the listener.
-- Listener bootstraps on a port.
-- Backend is structurally ready to expose HTTP endpoints for frontend consumption.
+- a workspace root structure exists for department-owned work
+- root-level scripting baseline exists
+- baseline environment-template support exists
+- platform documentation is being established under `workspace/docs/`
 
-## Frontend service
-`frontend/package.json` indicates:
-- local dev server can run independently
-- frontend/backend connection mechanism exists only implicitly unless documented elsewhere inside frontend-owned files
+### Auditability readiness
 
-## Connectivity assessment
-- **Likely local topology:** frontend on a Vite dev port, backend on an Express port.
-- **Not yet guaranteed:** frontend points to the correct backend without manual developer interpretation.
-- **Not yet guaranteed:** CORS policy / proxy arrangement is documented in a single integration contract.
-- **Not yet guaranteed:** parity-QA can reproduce the same environment assumptions as ui-integration.
+After this round, the following platform-owned documentation locations are expected to exist:
 
-## Current blockers by team
+- `workspace/docs/environment-status-report.md`
+- `workspace/docs/local-environment-contract.md`
 
-### ui-integration blockers
-1. No platform-owned canonical local environment contract for frontend-to-backend wiring.
-2. No root/shared `.env` template defining expected variables and safe placeholders.
-3. No single instruction set for exact boot sequence and expected URLs.
-4. API route inventory exists in backend artifacts, but not as a concise shared local integration checklist.
+These files provide a stable place to document:
 
-### frontend blockers
-1. API base URL / fetch target expectations are not centralized outside frontend-owned implementation context.
-2. No platform-owned fallback conventions for local development values.
-3. Root README is too minimal to onboard another team into the live environment.
+- what is evidenced
+- what is required but not yet supplied
+- what downstream teams may rely on today
+- what must still be confirmed elsewhere
 
-### backend blockers
-1. Runtime contract is only partially inferable from code/package files.
-2. No platform-owned declaration of which env vars are mandatory vs optional.
-3. No cross-team note clarifying expected local consumers and connectivity assumptions.
+## Missing or not yet evidenced
 
-### parity-qa blockers
-1. No single reproducible environment setup document at workspace level.
-2. No authoritative “ready when” checklist for local verification.
-3. No normalized config examples to reduce drift between engineers' local setups.
+The following items are **not** confirmed by platform from the current assignment context and should be treated as unresolved until evidenced in files or explicitly routed back through management:
 
-## Platform actions completed this round
-To make the environment usable now without editing product-owned implementation, platform is adding:
-- a root-level environment setup guide
-- a root-level `.env.example` documenting shared local defaults and placeholders
+### Secrets and real values
 
-These are documentation/contracts only and do not modify frontend/backend code.
+Not evidenced:
 
-## Recommended local baseline
+- actual secret values
+- developer-specific `.env` files
+- CI/CD secret injection mappings
+- production/staging credentials
+- third-party account provisioning status
 
-Use this as the current working contract until engineering teams formalize stricter runtime validation:
+### Runtime verification
 
-- Backend local port: `4000`
-- Frontend local port: `5173`
-- Frontend API base URL: `http://localhost:4000`
-- Node environment: `development`
+Not evidenced:
 
-## Readiness summary
+- successful local boot of frontend/backend
+- successful end-to-end integration runs
+- successful parity-QA execution
+- validated API connectivity between departments
+- validated database/cache/service availability
 
-### Ready now
-- basic local install/run per app
-- manual frontend/backend side-by-side development
-- backend endpoint bring-up
-- partial demo workflows
+### Service-specific contracts
 
-### Not ready yet
-- guaranteed one-command parity environment
-- standardized secrets/config handling
-- fully documented UI-to-API integration contract
-- stable parity-QA reproducibility without interpretation
+Not evidenced in this assignment context:
 
-## Immediate next follow-ups for other teams
-- **backend:** confirm/declare exact required env vars, CORS expectations, and canonical local port if different.
-- **frontend:** confirm exact env var name used for API base URL and whether Vite proxy is expected.
-- **ui-integration:** validate the documented baseline against actual request wiring and report mismatches.
-- **parity-qa:** use this setup contract for first reproducibility pass and log any ambiguity.
+- canonical port allocations for every service
+- required public/base URLs per app
+- authoritative list of all environment variables consumed by each department-owned service
+- fallback behavior when variables are missing
+- exact command expectations for each product surface
+
+### Infrastructure linkage
+
+Not evidenced:
+
+- deployment target configuration
+- container/orchestration assumptions
+- cloud resource bindings
+- preview/staging environment wiring
+- CI job-level execution guarantees
+
+## Team impact summary
+
+## `ui-integration`
+
+Currently unblocked at the platform layer for:
+
+- reading platform-owned docs under `workspace/docs/`
+- relying on the existence of a root-level environment baseline
+- identifying which prerequisites are still placeholders versus confirmed
+
+Still blocked or partially blocked on non-evidenced items such as:
+
+- concrete service URLs if not documented elsewhere
+- validated running backend/frontend instances
+- real credentials or tokens
+- any integration dependency that requires confirmed runtime behavior
+
+## `frontend`
+
+Currently unblocked at the platform layer for:
+
+- using the established workspace structure
+- referencing root-visible platform documentation
+- aligning requested env needs against the local environment contract
+- flagging missing variables or setup assumptions back through management
+
+Still blocked or partially blocked on non-evidenced items such as:
+
+- confirmed backend availability
+- actual secret values
+- app-specific runtime validation
+- final service contract details not yet published in evidence-backed artifacts
+
+## `backend`
+
+Currently unblocked at the platform layer for:
+
+- using the workspace baseline and root scripts
+- comparing backend env requirements against the documented contract format
+- surfacing missing shared configuration dependencies in a standard location
+
+Still blocked or partially blocked on non-evidenced items such as:
+
+- provisioned external services
+- real credentials
+- verified local runtime connectivity
+- deployment/infrastructure mappings not evidenced here
+
+## `parity-qa`
+
+Currently unblocked at the platform layer for:
+
+- using this report as the source of truth for what platform has actually confirmed
+- distinguishing repo-visible setup from unverified runtime claims
+- documenting test preconditions against the local environment contract
+
+Still blocked or partially blocked on non-evidenced items such as:
+
+- confirmed runnable environments
+- seeded data/state guarantees
+- credentialed access to external dependencies
+- stable endpoint/runtime verification
+
+## Required follow-ups
+
+The following should be supplied or confirmed in future updates if teams need stronger guarantees:
+
+1. An evidenced list of required environment variables by service/app.
+2. Canonical local run commands for each active department-owned surface.
+3. Canonical port/base URL allocations.
+4. Secret ownership and injection path documentation without exposing values.
+5. Runtime verification results from the departments that own executable services.
+6. CI/staging/deploy environment mapping, if those environments are in scope.
+
+## Placeholder checklist
+
+Use this section to convert unknowns into evidence-backed facts as follow-up artifacts land.
+
+- [ ] Root env template path(s) explicitly listed here
+- [ ] Root script names explicitly listed here
+- [ ] Service-by-service env variable matrix published
+- [ ] Port/base URL matrix published
+- [ ] Local startup sequence documented
+- [ ] External dependency list documented
+- [ ] Secret ownership/injection flow documented
+- [ ] Runtime verification results linked
+- [ ] QA preconditions documented
+
+## Evidence standard
+
+A claim should be added to the “ready” baseline only when one of the following is true:
+
+- it is visible in a platform-owned file under `workspace/`
+- it is explicitly assigned and confirmed through management
+- it is documented by the owning department in an artifact platform can cite
+
+Until then, this report should prefer “not yet evidenced” over assumption.

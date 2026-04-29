@@ -1,23 +1,26 @@
 # BriefLink
 
-BriefLink deployment and local-run artifact set for a Vercel-hosted app with Supabase-backed services.
+DevOps artifact set for BriefLink, targeting Vercel hosting with Supabase services.
 
 ## Repository
 
 - GitHub: `https://github.com/mhr2964/BriefLink.git`
 
-## What this folder contains
+## Included files
 
-- `README.md` — repository overview, local run notes, and deployment notes
-- `.gitignore` — recommended ignore patterns for a JavaScript/TypeScript web app
-- `.env.example` — example environment variables for local development and deployment
-- `deploy-plan.md` — step-by-step deployment plan for Vercel + Supabase
+- `README.md`
+- `.gitignore`
+- `.env.example`
+- `deploy-plan.md`
 
-## Local development
+## Local run
 
-1. Copy `.env.example` to `.env.local` for app-local development.
-2. Fill in the required values from your Supabase and app configuration.
-3. Install project dependencies at the repository root using your package manager.
-4. Start the local development server from the repository root.
+1. Copy the example env file into the app's local env file:
+   ```bash
+   cp workspace/devops/.env.example .env.local
+   ```
+2. Fill in real local values.
+3. From the repository root, install dependencies.
+4. From the repository root, start the development server.
 
-Example root-level commands:
+Example:

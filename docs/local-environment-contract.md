@@ -1,77 +1,249 @@
-# BriefLink Local Environment Contract
+# Local Environment Contract
 
-This is the current platform-owned local baseline for shared app/API work.
+_Last updated by platform on this round._
 
-## Runtime expectations
-- **Node.js:** use a current LTS release
-- **Package manager:** npm
-- **Frontend:** Vite app in `workspace/frontend`
-- **Backend:** Express app in `workspace/backend`
+## Purpose
 
-## Canonical local ports
-- **Frontend:** `5173`
-- **Backend/API:** `4000`
+This document defines the minimum contract for local environment documentation and configuration handoff across departments. It is intentionally limited to platform-evidenced process and file expectations. It does **not** invent app behavior or service requirements.
 
-If a team changes either port, they must update this contract and notify ui-integration and parity-qa.
+## Contract scope
 
-## Canonical API base URL
-Frontend-to-backend local traffic should target:
+This contract applies to:
 
-- `http://localhost:4000`
+- root/shared environment templates owned by platform
+- documentation of required variables and local prerequisites
+- handoff expectations for `frontend`, `backend`, `ui-integration`, and `parity-qa`
 
-Use this as the default local API origin for integration, QA, and handoff docs.
+This contract does **not** define:
 
-## Startup order
-1. Install backend dependencies in `workspace/backend`
-2. Install frontend dependencies in `workspace/frontend`
-3. Start the backend first on port `4000`
-4. Start the frontend second on port `5173`
-5. Open the frontend in browser and confirm it can reach the backend base URL above
+- secret values
+- app-specific business logic
+- service behavior
+- test outcomes
+- deployment semantics unless separately evidenced
 
-## Minimum local setup
-### Backend
-- working directory: `workspace/backend`
-- install: `npm install`
-- run: use the package script defined in `backend/package.json`
+## Current baseline assumptions platform can state
 
-### Frontend
-- working directory: `workspace/frontend`
-- install: `npm install`
-- run: use the package script defined in `frontend/package.json`
+From the current assignment context, platform can state only the following:
 
-## Environment variable convention
-Use the shared template in `workspace/docs/env-template.md`.
+- a root script baseline exists
+- a baseline environment template/setup exists
+- fuller shared documentation was still needed before this round
+- platform owns the shared documentation and contract layer under `workspace/docs/`
 
-Current local defaults:
-- `NODE_ENV=development`
-- `PORT=4000`
-- `BACKEND_PORT=4000`
-- `FRONTEND_PORT=5173`
-- `API_BASE_URL=http://localhost:4000`
-- `VITE_API_BASE_URL=http://localhost:4000`
+If any team needs stronger guarantees than the above, those guarantees must be documented in an evidenced artifact before they are treated as contractually available.
 
-## Team handoff instructions
+## Contract rules
 
-### frontend
-- Treat `http://localhost:4000` as the default backend origin for local work.
-- If the app uses a different env var name or proxy pattern, document the mismatch and align to this contract or request a platform revision.
+### 1. No secret values in repo-owned docs
 
-### backend
-- Keep the local API listener on `4000` unless a coordinated change is approved.
-- Document any required env vars beyond those listed in `env-template.md`.
-- Surface any CORS requirements that would block requests from `http://localhost:5173`.
+This repository may document:
 
-### ui-integration
-- Use this document as the authoritative local wiring baseline.
-- Validate that frontend requests resolve against `http://localhost:4000`.
-- Escalate any mismatch between actual code behavior and this contract.
+- variable names
+- whether a variable is required or optional
+- who owns provisioning of the value
+- where the value is expected to be injected locally
 
-### parity-qa
-- Use this contract for reproducible local verification.
-- Record failures as one of: setup issue, env mismatch, connectivity issue, or product bug.
+This repository must **not** document:
 
-## Current contract limits
-This contract defines the shared local baseline only. It does **not** yet guarantee:
-- one-command concurrent startup
-- production/staging secrets
-- finalized deploy environment naming
+- real secrets
+- personal tokens
+- production credentials
+- unredacted connection strings intended to remain private
+
+### 2. Environment requirements must be named, not implied
+
+For any service/app that expects environment configuration, the owning department should provide an evidenced list containing:
+
+- variable name
+- required/optional status
+- consumer(s)
+- safe example or placeholder format
+- notes on what happens if omitted, if known
+- owner of the real value
+
+If that list does not exist, teams should treat the requirement set as incomplete.
+
+### 3. Platform owns the shared contract format
+
+Platform owns:
+
+- the existence and location of shared environment documentation
+- root/shared template conventions
+- repo-visible guidance for how departments describe env needs
+
+Other departments own:
+
+- declaring the variables their software actually consumes
+- correcting inaccurate service-specific claims
+- validating their runtime behavior
+
+### 4. Runtime truth belongs to service owners
+
+A variable documented in a template or contract is not the same as a verified runtime configuration.
+
+Service-owning departments must separately confirm:
+
+- the app starts with the documented variables
+- the documented defaults/placeholders are accurate
+- any required external dependency is reachable
+- missing-variable behavior is as described
+
+### 5. QA and integration may rely only on evidenced setup
+
+`ui-integration` and `parity-qa` may rely on:
+
+- documented variable names and placeholders
+- documented local prerequisites
+- documented run-order dependencies
+- documented ports/base URLs
+
+They may **not** assume:
+
+- credentials exist
+- services are running
+- data is seeded
+- cross-service flows are valid
+
+unless those conditions are separately evidenced.
+
+## Required artifact shape
+
+When environment details are mature enough to publish, the shared contract should include, at minimum, the following sections.
+
+## A. File locations
+
+Document all relevant env/config files, for example:
+
+- root template file path: `[placeholder: path not yet cited in this document]`
+- service-specific template file path(s): `[placeholder]`
+- setup/readme references: `[placeholder]`
+
+If the actual paths are known later, replace placeholders with exact repo paths.
+
+## B. Variable matrix
+
+Each service/app should eventually publish a matrix like the following:
+
+| Variable | Required? | Consumed by | Example/Placeholder | Value owner | Notes |
+|---|---|---|---|---|---|
+| `[PLACEHOLDER_VAR]` | `[required/optional]` | `[service/app]` | `[safe-placeholder]` | `[team/person/system]` | `[behavior or notes]` |
+
+At present, this matrix is a required placeholder and not yet populated by evidenced service data in this assignment.
+
+## C. Local prerequisites
+
+Each runnable surface should document prerequisites such as:
+
+- language/runtime version
+- package manager expectation
+- database or external service dependency
+- seed/migration requirement
+- required local ports
+- browser/device assumptions if relevant
+
+Current state in this document: `[placeholder: prerequisite list not yet evidenced here]`
+
+## D. Startup contract
+
+Each runnable surface should eventually state:
+
+- startup command
+- expected dependent services
+- expected base URL/port
+- health-check or ready signal, if one exists
+
+Current state in this document: `[placeholder: startup contract not yet evidenced here]`
+
+## E. Ownership map
+
+Every variable or prerequisite should have an owner category:
+
+- `platform` — shared template location/format, root guidance
+- `frontend` — frontend-consumed variables and runtime validation
+- `backend` — backend-consumed variables and runtime validation
+- `ui-integration` — integration-specific composition assumptions
+- `parity-qa` — test preconditions and environment usage assumptions
+- `[placeholder for additional owner]`
+
+## Presently acceptable placeholders
+
+Until exact values/paths are confirmed, placeholders are acceptable only if they are explicit and non-misleading. Use forms like:
+
+- `[placeholder: exact env template path pending evidence]`
+- `[placeholder: backend-required variable list pending backend artifact]`
+- `[placeholder: frontend local port pending frontend artifact]`
+
+Do **not** replace unknowns with guessed defaults.
+
+## Minimum handoff expectations by team
+
+## `frontend`
+
+Should provide, in an evidenced artifact:
+
+- variables consumed by frontend code/tooling
+- whether each is required for local boot
+- expected local port/base URL
+- backend dependency assumptions, if any
+
+## `backend`
+
+Should provide, in an evidenced artifact:
+
+- variables consumed by backend services
+- required external dependencies
+- startup command and ready condition
+- local port/base URL
+- safe placeholders for non-secret config
+
+## `ui-integration`
+
+Should provide, in an evidenced artifact:
+
+- composition assumptions across frontend/backend surfaces
+- any integration-only variables or routing assumptions
+- required order of service startup, if any
+- what “ready for integration” means in observable terms
+
+## `parity-qa`
+
+Should provide, in an evidenced artifact:
+
+- test preconditions
+- required accounts/data/state assumptions
+- environment selection assumptions
+- blockers caused by missing variables, services, or setup docs
+
+## Platform acceptance rule
+
+Platform may treat an environment detail as part of the shared contract only when it is:
+
+- present in a platform-owned file, or
+- supplied by the owning department in a reviewable artifact, or
+- explicitly confirmed through management
+
+Until then, the correct contract state is a placeholder.
+
+## Open placeholders to resolve
+
+- [ ] Exact root env-template file path(s)
+- [ ] Exact root script names and purpose
+- [ ] Frontend variable matrix
+- [ ] Backend variable matrix
+- [ ] Integration composition prerequisites
+- [ ] QA precondition matrix
+- [ ] Port/base URL matrix
+- [ ] External dependency list
+- [ ] Local startup sequence
+- [ ] Secret ownership/injection guidance
+
+## Change policy
+
+When updating this contract:
+
+1. Preserve factual, evidenced statements.
+2. Replace placeholders only with sourceable facts.
+3. Attribute service-specific requirements to the owning department.
+4. Avoid converting runtime hopes into contract guarantees.
+5. Prefer an explicit gap over an invented default.

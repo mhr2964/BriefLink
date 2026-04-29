@@ -1,36 +1,40 @@
 # BriefLink Deploy Plan
 
-## Target stack
+## Stack
 
-- Frontend/application hosting: Vercel
-- Backend services: Supabase
-- Source repository: `https://github.com/mhr2964/BriefLink.git`
+- Hosting: Vercel
+- Backend: Supabase
+- Repo: `https://github.com/mhr2964/BriefLink.git`
 
-## Deployment goals
+## Pre-deploy
 
-- Run BriefLink locally with environment-based configuration.
-- Deploy preview and production builds through Vercel.
-- Store secrets in provider-managed environment variable settings.
-- Keep git and repository administration at the repository root, outside this staged DevOps folder.
+1. Ensure the repository root contains the app source and package manifest.
+2. Create or identify the Supabase project.
+3. Prepare required environment variables.
+4. Keep real secrets out of source control.
 
-## Pre-deployment checklist
+## Local validation
 
-1. Confirm the repository root contains the final application source code and package manifest.
-2. Confirm the app’s framework settings are compatible with Vercel.
-3. Create or identify the Supabase project for the target environment.
-4. Collect required environment variables:
-   - `NEXT_PUBLIC_APP_URL`
-   - `NEXT_PUBLIC_SUPABASE_URL`
-   - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-   - `SUPABASE_SERVICE_ROLE_KEY`
-5. Ensure no real secrets are committed to source control.
+1. Copy `workspace/devops/.env.example` to the root env file used by the app.
+2. Install dependencies from the repository root.
+3. Run the app locally from the repository root.
+4. Verify the app can reach configured Supabase services.
 
-## Local run procedure
+## Vercel deployment
 
-1. Copy `workspace/devops/.env.example` into the root app environment file expected by the stack, commonly `.env.local`.
-2. Set real local development values.
-3. Install dependencies from the repository root.
-4. Run the local development server from the repository root.
-5. Verify the app loads successfully and can reach Supabase-dependent functionality.
+1. Create/connect the Vercel project to the GitHub repository.
+2. Set required environment variables for preview and production.
+3. Configure the root directory if the app is not at the repo root.
+4. Trigger deployment.
+5. Validate the deployed app and critical flows.
 
-Example commands:
+## Post-deploy checks
+
+- App loads without missing env errors.
+- Supabase-backed features work.
+- Correct URL and redirect settings are configured.
+- No secrets are exposed client-side.
+
+## Git note
+
+Remote configuration, branch management, and pull/push verification are repository-root tasks handled by the user or platform, not by this staged DevOps artifact folder.

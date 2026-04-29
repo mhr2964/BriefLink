@@ -3,22 +3,18 @@ node_modules/
 .pnpm-store/
 .npm/
 .yarn/
-.yarn/cache/
-.yarn/unplugged/
-.yarn/build-state.yml
-.yarn/install-state.gz
 
-# build outputs
-dist/
-build/
+# build output
 .next/
 out/
-.vercel/
+dist/
+build/
 coverage/
+.vercel/
 playwright-report/
 test-results/
 
-# local env files
+# env files
 .env
 .env.local
 .env.development.local
@@ -32,15 +28,11 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# operating system files
+# OS/editor
 .DS_Store
 Thumbs.db
-
-# editor files
 .vscode/
 .idea/
-*.swp
-*.swo
 
 # TypeScript
 *.tsbuildinfo
