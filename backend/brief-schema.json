@@ -1,48 +1,37 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://brieflink.local/schemas/brief-schema.json",
-  "title": "ApiEnvelope",
-  "description": "Minimal API response envelope schema for the BriefLink backend foundation.",
-  "oneOf": [
-    {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["success", "data", "error"],
-      "properties": {
-        "success": { "const": true },
-        "data": {
-          "type": "object",
-          "additionalProperties": false,
-          "required": ["service", "status", "version"],
-          "properties": {
-            "service": { "type": "string", "const": "backend" },
-            "status": { "type": "string", "const": "ok" },
-            "version": { "type": "string", "const": "v1" }
-          }
-        },
-        "error": { "type": "null" },
-        "meta": { "type": "object" }
+  "$id": "https://brieflink.example/schemas/account-brief-artifact.json",
+  "title": "BriefLink Account Brief Artifact",
+  "description": "Canonical MVP 1 schema for the generated brief artifact returned by GET /api/v1/status when processing is completed.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "account_brief",
+    "risk_flags",
+    "prep_notes"
+  ],
+  "properties": {
+    "account_brief": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Generated account summary for seller preparation."
+    },
+    "risk_flags": {
+      "type": "array",
+      "description": "Known risks, caveats, or unresolved uncertainties surfaced during generation.",
+      "items": {
+        "type": "string",
+        "minLength": 1
       }
     },
-    {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["success", "data", "error"],
-      "properties": {
-        "success": { "const": false },
-        "data": { "type": "null" },
-        "error": {
-          "type": "object",
-          "additionalProperties": false,
-          "required": ["code", "message", "details"],
-          "properties": {
-            "code": { "type": "string" },
-            "message": { "type": "string" },
-            "details": { "type": "object" }
-          }
-        },
-        "meta": { "type": "object" }
+    "prep_notes": {
+      "type": "array",
+      "description": "Suggested preparation notes or discovery prompts for the seller.",
+      "items": {
+        "type": "string",
+        "minLength": 1
       }
     }
-  ]
+  },
+  "$comment": "Locked MVP 1 unknowns: output length targets, ordering guarantees, confidence scoring, citations, and source provenance are intentionally unspecified and not represented here."
 }
