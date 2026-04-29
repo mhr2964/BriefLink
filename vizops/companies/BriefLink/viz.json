@@ -1,186 +1,152 @@
 {
-  "project": "BriefLink",
-  "artifact": "viz",
+  "dashboardId": "brieflink-core-loop",
+  "title": "BriefLink Core Loop Ops Dashboard",
   "version": "1.0",
-  "updatedAt": "2026-04-29T21:15:00Z",
-  "slice": {
-    "name": "Create Brief from Link",
-    "status": "documented-prototype-slice",
-    "additiveBaselineNote": "This slice is an additive extension of the locked canonical MVP flow. The existing source-text create -> create brief -> share -> review path remains intact; link input adds a parallel create entry path that converges into the same downstream brief workflow."
+  "lastUpdated": "2026-04-29T21:17:35.547Z",
+  "freshness": {
+    "status": "manual-update-required",
+    "updatedAt": "2026-04-29T21:17:35.547Z",
+    "source": "manual",
+    "owner": "vizops",
+    "cadence": "Update when prototype parity changes, new funnel counts are known, or open UX/content decisions move.",
+    "staleAfterHours": 24
   },
-  "currentStatus": {
-    "state": "proto-defined",
-    "summary": "Prototype coverage for Create Brief from Link is now documented as the current source of truth for leadership review and implementation planning.",
-    "evidence": [
-      "Canonical proto-flow updated with additive link-input path",
-      "Success and error states defined for input validation and generation outcomes",
-      "User-visible acceptance criteria captured for prototype parity"
-    ],
-    "nextFocus": [
-      "Frontend prototype/UI alignment to documented states",
-      "Implementation of loading, failure, and saved-brief transitions",
-      "Verification that saved brief detail matches review output and share path"
-    ]
+  "summary": {
+    "focus": "Track the first active BriefLink funnel from prototype parity through sharing and recipient open behavior.",
+    "sourceOfTruth": "Manual operating inputs until product instrumentation is live.",
+    "currentPhase": "prototype-parity-and-manual-funnel-tracking"
   },
-  "userFlowSummary": {
-    "primaryPath": [
-      "Create screen: choose link input mode and enter URL",
-      "Loading/generation state: submit URL and process source content",
-      "Generated brief review/edit: inspect and optionally refine generated brief",
-      "Saved brief detail: land on persistent brief view ready for sharing"
-    ],
-    "alternateStates": [
-      "Invalid URL blocks generation and shows inline feedback",
-      "Generation failure shows recoverable error with retry/return path"
-    ]
-  },
-  "screenCoverage": [
+  "sections": [
     {
-      "id": "input",
-      "label": "Create Brief Input",
-      "purpose": "Collect a source URL through the additive link-input path.",
-      "coverage": [
-        "mode selection",
-        "URL entry",
-        "validation messaging",
-        "submit readiness"
+      "id": "prototype-parity-status",
+      "title": "Prototype Parity Status",
+      "description": "Whether the shipped experience matches the approved prototype slice closely enough to trust funnel observations.",
+      "type": "status-list",
+      "source": "manual",
+      "updatedAt": "2026-04-29T21:17:35.547Z",
+      "items": [
+        {
+          "label": "Canonical slice",
+          "status": "active",
+          "value": "Create Brief from Link",
+          "note": "Approved as the active product slice to mirror operationally."
+        },
+        {
+          "label": "Implementation parity",
+          "status": "partial",
+          "value": "In progress",
+          "note": "Engineering has active frontend/backend implementation work, but parity is not yet confirmed complete."
+        },
+        {
+          "label": "Funnel-readiness confidence",
+          "status": "limited",
+          "value": "Use caution",
+          "note": "Manual counts are useful for trend visibility, but not for final conversion conclusions until parity closes."
+        }
       ]
     },
     {
-      "id": "loading",
-      "label": "Generation Loading",
-      "purpose": "Communicate that the system is retrieving and transforming link content into a brief.",
-      "coverage": [
-        "processing state",
-        "source reference visibility",
-        "retry/return affordance on failure"
+      "id": "core-funnel",
+      "title": "Core Funnel",
+      "description": "Manual source-of-truth counters for the first product loop.",
+      "type": "metric-grid",
+      "source": "manual",
+      "updatedAt": "2026-04-29T21:17:35.547Z",
+      "metrics": [
+        {
+          "id": "create-brief-starts",
+          "label": "Create-brief starts",
+          "value": null,
+          "unit": "count",
+          "status": "needs-update",
+          "definition": "Number of sessions/users who begin the create-brief flow."
+        },
+        {
+          "id": "create-brief-completions",
+          "label": "Create-brief completions",
+          "value": null,
+          "unit": "count",
+          "status": "needs-update",
+          "definition": "Number of successfully completed brief generations."
+        },
+        {
+          "id": "share-link-copies",
+          "label": "Share-link copies",
+          "value": null,
+          "unit": "count",
+          "status": "needs-update",
+          "definition": "Number of times users copy the generated brief/share link."
+        },
+        {
+          "id": "read-view-opens",
+          "label": "Read-view opens",
+          "value": null,
+          "unit": "count",
+          "status": "needs-update",
+          "definition": "Number of recipient/read-side opens of a shared brief link."
+        }
       ]
     },
     {
-      "id": "review-edit",
-      "label": "Generated Brief Review/Edit",
-      "purpose": "Show the generated brief in a user-reviewable form before final save/share actions.",
-      "coverage": [
-        "generated title/summary/body",
-        "source context",
-        "edit or refine controls",
-        "share/save continuation"
+      "id": "manual-source-of-truth",
+      "title": "Manual Source of Truth",
+      "description": "Where operators should collect and overwrite dashboard values until instrumentation is available.",
+      "type": "field-list",
+      "source": "manual",
+      "updatedAt": "2026-04-29T21:17:35.547Z",
+      "fields": [
+        {
+          "label": "Counting method",
+          "value": "Manual tally from prototype tests, QA walkthroughs, founder/operator usage, and any temporary logs."
+        },
+        {
+          "label": "Update trigger",
+          "value": "Overwrite counts when any new observed session meaningfully changes the funnel picture."
+        },
+        {
+          "label": "Primary owner",
+          "value": "vizops maintains the dashboard; product/engineering should supply new observed values."
+        },
+        {
+          "label": "Confidence note",
+          "value": "Record directional truth, not false precision. Leave value null if no reliable count exists."
+        }
       ]
     },
     {
-      "id": "saved-brief-detail",
-      "label": "Saved Brief Detail",
-      "purpose": "Present the persisted brief as the share-ready post-generation destination.",
-      "coverage": [
-        "saved brief content",
-        "share actions",
-        "return/create another path"
-      ]
-    },
-    {
-      "id": "invalid-url",
-      "label": "Invalid URL",
-      "purpose": "Handle malformed, empty, or unacceptable link input before processing starts.",
-      "coverage": [
-        "inline validation error",
-        "blocked submission",
-        "correction path"
-      ]
-    },
-    {
-      "id": "generation-failure",
-      "label": "Generation Failure",
-      "purpose": "Handle accepted links that cannot be fetched, parsed, or converted into a usable brief.",
-      "coverage": [
-        "failure messaging",
-        "distinct post-submit error state",
-        "retry and return options"
+      "id": "open-decisions-and-gaps",
+      "title": "Open UX/Content Decisions Tied to Prototype Gaps",
+      "description": "Decision list to resolve before parity can be called complete and funnel interpretation can tighten.",
+      "type": "decision-list",
+      "source": "manual",
+      "updatedAt": "2026-04-29T21:17:35.547Z",
+      "items": [
+        {
+          "decision": "Confirm exact create-brief entry-state and CTA copy used in the approved prototype.",
+          "status": "open",
+          "impact": "Affects what counts as a funnel start and whether start-rate comparisons are apples-to-apples."
+        },
+        {
+          "decision": "Confirm what completion means operationally: brief generated, brief saved, or share-ready state.",
+          "status": "open",
+          "impact": "Changes completion counting and denominator logic."
+        },
+        {
+          "decision": "Confirm the share action to track as canonical: copy link, native share, or both.",
+          "status": "open",
+          "impact": "Determines whether share-link copies are a narrow proxy or the actual share metric."
+        },
+        {
+          "decision": "Confirm reader open definition: unique viewers, total opens, or first open per brief.",
+          "status": "open",
+          "impact": "Prevents read-view metrics from overstating engagement."
+        },
+        {
+          "decision": "Confirm any missing microcopy or loading/error states that differ from the prototype.",
+          "status": "open",
+          "impact": "Prototype mismatch can distort drop-off and qualitative feedback."
+        }
       ]
     }
-  ],
-  "stateCoverage": {
-    "input": [
-      "idle",
-      "link-mode-selected",
-      "url-empty",
-      "url-invalid",
-      "url-valid",
-      "submit-enabled",
-      "submit-disabled"
-    ],
-    "loading": [
-      "starting",
-      "in-progress",
-      "source-visible"
-    ],
-    "generatedBriefReviewEdit": [
-      "draft-ready",
-      "partial-content-warning",
-      "editable"
-    ],
-    "savedBriefDetail": [
-      "saved",
-      "share-ready",
-      "post-save-success"
-    ],
-    "invalidUrl": [
-      "validation-error-visible",
-      "generation-not-started"
-    ],
-    "generationFailure": [
-      "fetch-failed",
-      "generation-failed",
-      "empty-result"
-    ]
-  },
-  "acceptanceCriteria": [
-    {
-      "id": "viz-ac-1",
-      "focus": "user-visible completeness",
-      "text": "The prototype clearly shows a link-input entry path from the create screen, including URL entry and validation behavior."
-    },
-    {
-      "id": "viz-ac-2",
-      "focus": "prototype parity",
-      "text": "The live dashboard representation matches the canonical proto flow by showing the additive link path without replacing the locked source-text baseline."
-    },
-    {
-      "id": "viz-ac-3",
-      "focus": "user-visible completeness",
-      "text": "Loading/generation is represented as a distinct user-visible state between link submission and brief review."
-    },
-    {
-      "id": "viz-ac-4",
-      "focus": "user-visible completeness",
-      "text": "Generated brief review/edit is represented as a separate state from saved brief detail so draft inspection and persistent output are not conflated."
-    },
-    {
-      "id": "viz-ac-5",
-      "focus": "prototype parity",
-      "text": "Saved brief detail is included as a downstream destination after successful generation and review, with sharing still available."
-    },
-    {
-      "id": "viz-ac-6",
-      "focus": "user-visible completeness",
-      "text": "Invalid URL is represented as a pre-submit error state that blocks generation and gives correction feedback."
-    },
-    {
-      "id": "viz-ac-7",
-      "focus": "user-visible completeness",
-      "text": "Generation failure is represented as a post-submit error state distinct from invalid URL, with clear retry or return options."
-    },
-    {
-      "id": "viz-ac-8",
-      "focus": "prototype parity",
-      "text": "All documented user-visible states in the proto slice are present in this dashboard view: input, loading, generated brief review/edit, saved brief detail, invalid URL, and generation failure."
-    }
-  ],
-  "operationalView": {
-    "coverageStatus": "complete-for-current-slice",
-    "prototypeParity": "aligned-to-proto-flow-json",
-    "risks": [
-      "Saved brief detail is documented here as a required downstream state and should be validated against future frontend implementation.",
-      "Review and share ordering may differ in existing baseline language; implementation should preserve additive slice intent while keeping state transitions explicit."
-    ]
-  }
+  ]
 }
