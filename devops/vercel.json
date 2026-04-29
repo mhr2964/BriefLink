@@ -1,0 +1,17 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "version": 2,
+  "github": {
+    "enabled": true
+  },
+  "framework": null,
+  "buildCommand": "cd frontend && npm install && npm run build",
+  "outputDirectory": "frontend/dist",
+  "installCommand": "echo \"Dependencies are installed in buildCommand placeholder until repo root package strategy is finalized.\"",
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "https://api.brieflink.app/$1"
+    }
+  ]
+}

@@ -1,16 +1,18 @@
-type RuntimeConfig = {
-  appOrigin: string;
-  apiOrigin: string;
+export type RuntimeConfig = {
+  appOrigin: string | null;
+  apiOrigin: string | null;
 };
 
-const DEFAULT_APP_ORIGIN = 'https://app.brieflink.app';
-const DEFAULT_API_ORIGIN = 'https://api.brieflink.app';
+export const RUNTIME_ENV_KEYS = {
+  appOrigin: 'VITE_APP_ORIGIN',
+  apiOrigin: 'VITE_API_ORIGIN',
+} as const;
 
-function readEnvValue(value: string | undefined, fallback: string): string {
+function normalizeOrigin(value: string | undefined): string | null {
   const trimmedValue = value?.trim();
 
   if (!trimmedValue) {
-    return fallback;
+    return null;
   }
 
   return trimmedValue.replace(/\/+$/, '');
@@ -20,7 +22,7 @@ export function getRuntimeConfig(): RuntimeConfig {
   const env = import.meta.env as Record<string, string | undefined>;
 
   return {
-    appOrigin: readEnvValue(env.VITE_APP_ORIGIN, DEFAULT_APP_ORIGIN),
-    apiOrigin: readEnvValue(env.VITE_API_ORIGIN, DEFAULT_API_ORIGIN),
+    appOrigin: normalizeOrigin(env[RUNTIME_ENV_KEYS.appOrigin]),
+    apiOrigin: normalizeOrigin(env[RUNTIME_ENV_KEYS.apiOrigin]),
   };
 }

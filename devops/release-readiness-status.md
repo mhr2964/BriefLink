@@ -1,98 +1,110 @@
 # Release Readiness Status
 
 ## Canonical source for hosted status
-`workspace/docs/preview-hostname-and-env-status.md` is the **canonical source** for preview hostname and environment-status tracking.
+`workspace/docs/preview-hostname-and-env-status.md` remains the **canonical source** for preview hostname and environment-status tracking.
 
-This devops status should stay aligned to that document unless newer evidence is posted.
+This release-readiness document must stay aligned to that source while also reflecting the CEO-approved planning placeholders now in company context.
 
-## Canonical deployability statement
-The current accepted deployability statement remains:
+## Current readiness truth
+The current accepted readiness statement is:
 
-> **BriefLink is locally runnable with defined CI/supporting deployment artifacts, but there is not yet execution-verified release health and there is no evidenced preview or public host URL.**
+> **BriefLink is locally runnable with defined CI/supporting deployment artifacts. CEO-approved hosted target placeholders now exist for planning/config purposes, but live provisioning, deployment execution, and release health remain unverified.**
 
-## Current hosted-target status
-Per `workspace/docs/preview-hostname-and-env-status.md`:
+## Approved planning placeholders
+The following values are now approved as **planning placeholders only**:
 
-- **No live preview hostname exists yet**
-- **No live public hostname exists yet**
-- therefore **no live hosted target is currently evidenced**
+- **Frontend deploy target:** Vercel
+- **Preview frontend hostname placeholder:** `brieflink-preview.vercel.app`
+- **Public frontend hostname placeholder:** `app.brieflink.app`
+- **Backend/API public origin placeholder:** `https://api.brieflink.app`
+- **Backend hosting/config basis:** Supabase-backed environment configuration
 
-This means the project should still be described as **local-only from an evidence standpoint**.
+These values may be used in deploy artifacts, env docs, and config wiring guidance.
+
+They must **not** be represented as already provisioned, already deployed, or execution-verified unless new evidence is posted.
+
+## Live hosted-target status
+Even with approved planning placeholders, the current evidence still supports this hosted-status conclusion:
+
+- no live hosted target is yet verified
+- no preview deployment is yet execution-verified
+- no public deployment is yet execution-verified
+- no deployed API origin is yet execution-verified
+- no hosted release-health check is yet evidenced
+
+Therefore the project remains:
+- **artifact-ready for placeholder-based hosting setup**
+- **locally runnable**
+- **not yet verified as hosted/live**
 
 ## What is ready now
-The currently evidenced ready state is limited to artifact and local-run readiness:
+The currently evidenced ready state includes:
 
-- repository/workspace artifacts are present
-- frontend and backend source trees are present
-- deploy planning documentation exists
-- environment-contract documentation exists
-- CI/supporting deployment artifacts are defined at the documentation/artifact level
-- local deployability remains the truthful current status
+- local runnable code and project structure
+- deploy planning artifacts
+- release-readiness documentation
+- placeholder-based hosted target planning values
+- env/config preparation basis for Vercel frontend + Supabase-backed backend configuration
 
-## Route and deploy guidance dependencies
-Current release guidance depends on these visible artifacts:
+## Exact remaining blockers
+List only the currently evidenced remaining blockers:
 
-- `workspace/docs/preview-hostname-and-env-status.md` **(canonical hosted-status source)**
-- `workspace/devops/deploy-plan.md`
-- `workspace/devops/README.md`
-- `workspace/docs/environment-status-report.md`
-- `workspace/docs/local-environment-contract.md`
-- `workspace/docs/env-template.md`
-- `workspace/frontend/package.json`
-- `workspace/backend/package.json`
-- `workspace/frontend/src/App.tsx`
-- `workspace/backend/src/app.js`
-- `workspace/backend/src/index.js`
+1. **Placeholder hostnames/origins are approved for planning, but live provisioning is not evidenced**
+2. **No execution-verified preview deployment is evidenced at `brieflink-preview.vercel.app`**
+3. **No execution-verified public deployment is evidenced at `app.brieflink.app`**
+4. **No execution-verified deployed API origin is evidenced at `https://api.brieflink.app`**
+5. **Hosted environment injection/verification is not yet evidenced**
+6. **No execution-verified hosted release health is evidenced**
 
-These support local/runbook readiness, but do not by themselves evidence a successful hosted release.
+## Planning record vs live record
+Current status should be described precisely:
 
-## Exact remaining hosted blockers
-List only the hosted blockers evidenced by `workspace/docs/preview-hostname-and-env-status.md`:
+- **Planning record exists:** yes
+- **Live release-target record exists:** no verified evidence yet
+- **Hosted deployment verified:** no
+- **Release health verified:** no
 
-1. **No preview hostname has been provisioned or confirmed**
-2. **No public hostname has been provisioned or confirmed**
-3. **Hosted environment injection values have not been provided/confirmed**
-4. **No execution-verified hosted release health is evidenced**
+## Placeholder target record
+For deploy-planning purposes only, the current target record is:
 
-No additional CI, packaging, or deployment blocker is evidenced from the currently supplied board/tree/docs beyond those hosted gaps.
+- **Provider:** Vercel
+- **Preview frontend hostname:** `https://brieflink-preview.vercel.app`
+- **Public frontend hostname:** `https://app.brieflink.app`
+- **API public origin:** `https://api.brieflink.app`
+- **Backend config basis:** Supabase-backed environment configuration
 
-## What is not evidenced
-The following should continue to be treated as not yet evidenced:
+Again: this is a **planning placeholder record**, not proof of live deployment.
 
-- a reachable preview deployment
-- a reachable public deployment
-- hosted frontend/base URL values
-- hosted backend/API URL values
-- confirmed hosted environment variable injection
-- successful hosted route validation
-- execution-verified release health
+## What is not yet evidenced
+The following are still not evidenced:
 
-## Placeholder fields to fill when platform provides the first hosted data
-Populate these only after platform posts evidence consistent with the canonical hosted-status doc.
+- DNS/control verification for `app.brieflink.app`
+- reachable preview deployment on Vercel
+- reachable public deployment on Vercel
+- reachable deployed API at `https://api.brieflink.app`
+- confirmed hosted env injection values
+- confirmed frontend runtime consumption of final hosted env values in a deployed environment
+- hosted smoke-test results
+- release-health verification timestamp
 
-### Hostnames
-- **Preview frontend URL:** `<PENDING_PLATFORM_PREVIEW_FRONTEND_URL>`
-- **Preview API URL:** `<PENDING_PLATFORM_PREVIEW_API_URL>`
-- **Public frontend URL:** `<PENDING_PLATFORM_PUBLIC_FRONTEND_URL>`
-- **Public API URL:** `<PENDING_PLATFORM_PUBLIC_API_URL>`
+## Conversion criteria from placeholder-ready to hosted-ready
+The release posture can move from placeholder-planned to hosted-ready only when evidence exists for:
 
-### Hosted environment values
-- **Hosted `NODE_ENV`:** `<PENDING_PLATFORM_NODE_ENV>`
-- **Hosted port behavior/value:** `<PENDING_PLATFORM_PORT_BEHAVIOR>`
-- **Hosted frontend origin:** `<PENDING_PLATFORM_FRONTEND_ORIGIN>`
-- **Hosted API base URL:** `<PENDING_PLATFORM_API_BASE_URL>`
-- **Additional hosted env vars:** `<PENDING_PLATFORM_ADDITIONAL_ENV_VARS>`
-
-### Verification
-- **Preview deploy evidence:** `<PENDING_PREVIEW_DEPLOY_EVIDENCE>`
-- **Production deploy evidence:** `<PENDING_PRODUCTION_DEPLOY_EVIDENCE>`
-- **Release-health verification timestamp:** `<PENDING_RELEASE_HEALTH_TIMESTAMP>`
-- **Verified by:** `<PENDING_VERIFIER_OR_TEAM>`
-- **Known hosted issues:** `<PENDING_HOSTED_ISSUES_OR_NONE>`
+1. provisioned frontend preview target
+2. provisioned frontend public target
+3. provisioned/reachable API origin
+4. confirmed hosted environment configuration injection
+5. successful hosted smoke checks
+6. release-health verification
 
 ## Current handoff summary
-As of the current canonical hosted-status document:
-- no live hosted target exists yet
-- local-only deployability remains the truthful status
-- the remaining blockers are only the exact hosted gaps listed above
-- release-readiness wording should not claim a preview URL, public URL, or execution-verified hosted health until those are evidenced
+As of the current documented state:
+
+- CEO-approved placeholder targets now exist for planning
+- Vercel is the provisional frontend host target
+- `brieflink-preview.vercel.app` is the preview hostname placeholder
+- `app.brieflink.app` is the public hostname placeholder
+- `https://api.brieflink.app` is the API origin placeholder
+- Supabase-backed environment configuration is the backend config basis
+- execution/provisioning remains unverified
+- release readiness is still truthful only when described as local + planning-artifact ready, not live-hosted verified

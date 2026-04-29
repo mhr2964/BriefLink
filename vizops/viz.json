@@ -1,138 +1,176 @@
 {
-  "company": "BriefLink",
-  "updatedAt": "2026-04-29T22:14:30Z",
-  "activeWave": "Activated Brief Status",
-  "summary": "Operating sweep is active across exec lanes. Engineering reconciliation is underway under expanded CTO authority; product coherence and growth are in motion; archive and efficiency were activated because board and memory hygiene were thin; backend remains the clearest active blocker.",
+  "title": "BriefLink MVP Product Coherence Dashboard",
+  "updatedAt": "2026-04-29T23:22:00Z",
+  "product": {
+    "name": "BriefLink",
+    "purpose": "Turn scattered company information into a shareable account brief for meetings, outreach, and handoffs."
+  },
+  "summary": {
+    "focus": "Track coherence across the MVP loop from landing dashboard to intake, processing, and brief consumption/sharing.",
+    "sourceOfTruth": "Visible prototype and workspace artifacts for this cycle.",
+    "replacementNote": "This replaces the prior packaging-oriented dashboard with a lightweight product-coherence monitor."
+  },
   "sections": [
     {
-      "id": "exec-streams",
-      "title": "Exec Streams",
-      "status": "active",
+      "id": "mvp-loop-status",
+      "title": "MVP Loop Status",
+      "type": "status-grid",
       "items": [
         {
-          "owner": "CTO",
-          "status": "in_progress",
-          "note": "Owns the full engineering sweep across frontend, backend, ui-integration, parity-qa, spec-stitching, platform, and devops."
-        },
-        {
-          "owner": "Head of Product",
-          "status": "in_progress",
-          "note": "Driving prototype and brief coherence for the Activated Brief Status wave."
-        },
-        {
-          "owner": "Head of Growth",
-          "status": "in_progress",
-          "note": "Launch lane is active; concrete shipped growth outputs are not yet visible on the board."
-        },
-        {
-          "owner": "Chief of Staff",
-          "status": "in_progress",
-          "note": "Closing archive and board hygiene gaps after an effectively empty digest and memory baseline."
-        }
-      ]
-    },
-    {
-      "id": "engineering-reconciliation",
-      "title": "Engineering Reconciliation",
-      "status": "in_progress",
-      "items": [
-        {
-          "lane": "frontend",
-          "status": "progress_visible",
-          "note": "Activated Brief Status view files were written; frontend scope is now narrowed to view construction."
-        },
-        {
-          "lane": "ui-integration",
-          "status": "in_progress",
-          "note": "Recon identified `frontend/src/ActivatedBriefStatusView.tsx`; CEO requested integration-closure handoff from that artifact."
-        },
-        {
-          "lane": "backend",
-          "status": "blocked",
-          "note": "Monitoring implementation companion remains partial/truncated; CTO paused the completion loop and escalated the blocker."
-        },
-        {
-          "lane": "parity-qa/spec-stitching/platform/devops",
-          "status": "sweep_active",
-          "note": "Under CTO reconciliation authority; no fresh blocking board evidence yet beyond backend."
-        }
-      ]
-    },
-    {
-      "id": "product-coherence",
-      "title": "Product Coherence",
-      "status": "in_progress",
-      "items": [
-        {
-          "topic": "wave",
-          "status": "locked",
-          "note": "Activated Brief Status is the active product wave."
-        },
-        {
-          "topic": "funnel",
-          "status": "locked",
-          "note": "Canonical funnel remains visit -> brief-created -> brief-shared -> reply-received -> account-converted; activation remains brief-shared."
-        },
-        {
-          "topic": "coherence-work",
+          "stage": "Landing dashboard",
+          "goal": "Orient the operator quickly and route them into brief creation or recent work.",
           "status": "active",
-          "note": "Current product work is focused on post-activation core experience clarity rather than new scope."
+          "checks": [
+            "Primary action to start intake is visible",
+            "Recent or existing briefs can be surfaced",
+            "Empty and populated dashboard variants are defined"
+          ]
+        },
+        {
+          "stage": "Ingestion / intake",
+          "goal": "Collect company context, links, notes, and source inputs needed to build a brief.",
+          "status": "active",
+          "checks": [
+            "Input collection state is distinct from processing state",
+            "Users can understand what data is being gathered",
+            "Partial completion and validation gaps are representable"
+          ]
+        },
+        {
+          "stage": "Processing / generation",
+          "goal": "Communicate retrieval, synthesis, and brief generation progress without implying completion too early.",
+          "status": "active",
+          "checks": [
+            "Processing state is explicit and non-idle",
+            "Skeletons/placeholders preserve layout during generation",
+            "Errors and stale results are distinguishable from in-progress work"
+          ]
+        },
+        {
+          "stage": "Brief viewing / sharing",
+          "goal": "Show generated brief content clearly and support ready-to-share handoff behavior.",
+          "status": "active",
+          "checks": [
+            "Ready brief state is distinct from partial brief state",
+            "Share/export actions appear only when content is usable",
+            "Refresh or regeneration path is visible when content is stale"
+          ]
         }
       ]
     },
     {
-      "id": "growth-lane",
-      "title": "Growth Lane",
-      "status": "in_progress",
-      "items": [
+      "id": "module-definitions",
+      "title": "Module Definitions: Empty vs Populated",
+      "type": "matrix",
+      "modules": [
         {
-          "status": "active",
-          "note": "Growth was activated in the operating sweep to advance launch assets."
+          "name": "Dashboard",
+          "emptyDefinition": "No briefs or no recent activity yet; emphasize primary CTA, explain value, and avoid dead-end empty chrome.",
+          "populatedDefinition": "Show recent briefs, current draft/progress, and next-most-likely action to continue work."
         },
         {
-          "status": "awaiting-visible-output",
-          "note": "No concrete growth deliverable is yet visible in the recent board slice."
+          "name": "Intake workspace",
+          "emptyDefinition": "No sources collected yet; present input affordances, examples, and minimum required fields.",
+          "populatedDefinition": "Display collected sources, notes, validation state, and ability to continue or submit for processing."
+        },
+        {
+          "name": "Processing panel",
+          "emptyDefinition": "Not started; no progress UI should imply work is underway.",
+          "populatedDefinition": "Active progress or completed synthesis state with clear movement toward a generated brief."
+        },
+        {
+          "name": "Brief viewer",
+          "emptyDefinition": "No brief generated yet; explain what will appear here after processing.",
+          "populatedDefinition": "Render structured brief sections, metadata, and sharing/export affordances."
         }
       ]
     },
     {
-      "id": "archive-efficiency",
-      "title": "Archive + Efficiency",
-      "status": "in_progress",
-      "items": [
+      "id": "canonical-ui-states",
+      "title": "Canonical UI States",
+      "type": "state-list",
+      "states": [
         {
-          "lane": "archive",
-          "status": "active",
-          "note": "Archivist was activated to snapshot the phase transition."
+          "name": "empty",
+          "meaning": "No user data, source material, or generated brief exists for the current surface.",
+          "useOn": ["dashboard", "intake", "brief viewer"]
         },
         {
-          "lane": "efficiency",
-          "status": "active",
-          "note": "Efficiency was activated to assess whether current parallel execution is healthy."
+          "name": "collecting",
+          "meaning": "User is adding or the system is gathering source inputs, but generation has not begun.",
+          "useOn": ["intake", "source lists", "upload/link modules"]
         },
         {
-          "lane": "hygiene",
-          "status": "needs_improvement",
-          "note": "Board digest has no entries and memory was described as effectively empty, so freshness discipline is part of this sweep."
+          "name": "processing",
+          "meaning": "Retrieval, synthesis, or generation is actively running.",
+          "useOn": ["processing panel", "dashboard recent activity", "brief viewer shell"]
+        },
+        {
+          "name": "ready",
+          "meaning": "Content is complete enough for normal viewing and sharing.",
+          "useOn": ["brief viewer", "dashboard cards", "share actions"]
+        },
+        {
+          "name": "partial",
+          "meaning": "Some useful content exists, but expected sections or source coverage are incomplete.",
+          "useOn": ["brief viewer", "dashboard summaries", "source coverage modules"]
+        },
+        {
+          "name": "error",
+          "meaning": "A blocking failure prevented collection, processing, or retrieval.",
+          "useOn": ["intake", "processing panel", "brief viewer", "share flows"]
+        },
+        {
+          "name": "stale/needs-refresh",
+          "meaning": "Displayed content exists but is no longer trusted as current relative to new inputs or elapsed time.",
+          "useOn": ["dashboard recents", "brief viewer", "share readiness indicators"]
         }
       ]
     },
     {
-      "id": "blocked-items",
-      "title": "Blocked Items",
-      "status": "attention_required",
-      "items": [
+      "id": "skeleton-guidance",
+      "title": "Skeleton / Placeholder Guidance by Screen",
+      "type": "guidance-list",
+      "screens": [
         {
-          "item": "Backend monitoring companion",
-          "status": "blocked",
-          "note": "Partial artifact could not be confirmed complete because builder output truncated repeatedly."
+          "screen": "Landing dashboard",
+          "guidance": [
+            "Use card/list skeletons for recent briefs and activity rows.",
+            "Keep primary CTA visible even while supporting content loads.",
+            "Do not show fake metrics or decorative placeholders that imply nonexistent data."
+          ]
+        },
+        {
+          "screen": "Intake / source collection",
+          "guidance": [
+            "Use field-level placeholders only where structure is known.",
+            "Represent pending source ingestion with item rows, not completed content blocks.",
+            "Keep validation and minimum-required-input messaging visible during collection."
+          ]
+        },
+        {
+          "screen": "Processing / generation",
+          "guidance": [
+            "Use a stable progress shell with section placeholders matching eventual brief layout.",
+            "Show that work is underway without inventing precise completion timing.",
+            "Preserve page structure so transition to ready state does not shift the interface unexpectedly."
+          ]
+        },
+        {
+          "screen": "Brief viewer / sharing",
+          "guidance": [
+            "Use section skeletons for summary, key facts, and narrative blocks while content resolves.",
+            "Hide or disable share/export until state is ready or explicitly permitted for partial output.",
+            "If stale, preserve current content but add visible refresh/regenerate treatment rather than blanking the page."
+          ]
         }
       ]
+    },
+    {
+      "id": "evidence-contract",
+      "title": "Operational Contract Note",
+      "type": "note",
+      "body": "For this cycle, inaccessible or omitted board artifact text is non-operative. Visible prototype files and visible workspace artifacts are operative evidence. Dashboard truth should reflect durable observable product artifacts, not missing proposal text or header-only board references."
     }
-  ],
-  "freshness": {
-    "sourceWindow": "CEO operating sweep and board activity through 2026-04-29T22:14:30Z",
-    "confidence": "medium",
-    "note": "High confidence on active lanes and blockers; lower confidence on exact progress inside growth/archive/efficiency because outputs are only partially visible so far."
-  }
+  ]
 }

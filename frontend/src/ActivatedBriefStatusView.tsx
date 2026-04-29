@@ -1,4 +1,5 @@
 import React from 'react';
+import { getRuntimeConfig } from './config/runtimeConfig';
 import { getBriefDraftStore, type MonitoringStage } from './lib/briefDraftStore';
 
 type StatusAreaState = 'ready' | 'loading' | 'empty' | 'error';
@@ -73,13 +74,17 @@ function SurfaceCard({
 
 function ShareLinkPanel({
   shareLink,
+  sharePath,
   copied,
   onCopyLink,
 }: {
-  shareLink: string;
+  shareLink: string | null;
+  sharePath: string;
   copied: boolean;
   onCopyLink: () => void;
 }) {
+  const liveLinkLabel = shareLink ?? sharePath;
+
   return (
     <div
       style={{
@@ -92,23 +97,30 @@ function ShareLinkPanel({
     >
       <div style={{ display: 'grid', gap: 6 }}>
         <div style={{ fontSize: 13, color: '#64748b' }}>Live link</div>
-        <div style={{ fontSize: 15, fontWeight: 600, color: '#0f172a' }}>{shareLink}</div>
+        <div style={{ fontSize: 15, fontWeight: 600, color: '#0f172a', wordBreak: 'break-word' }}>
+          {liveLinkLabel}
+        </div>
         <div style={{ fontSize: 13, color: copied ? '#166534' : '#64748b' }}>
-          {copied ? 'Link copied to clipboard' : 'Share the active brief link without reopening setup'}
+          {copied
+            ? 'Link copied to clipboard'
+            : shareLink
+              ? 'Share the active brief link without reopening setup'
+              : 'Set VITE_APP_ORIGIN to enable full hosted share-link copying'}
         </div>
       </div>
 
       <button
         type="button"
         onClick={onCopyLink}
+        disabled={!shareLink}
         style={{
           borderRadius: 999,
           border: '1px solid rgba(15, 23, 42, 0.1)',
-          background: '#0f172a',
+          background: shareLink ? '#0f172a' : '#cbd5e1',
           color: '#ffffff',
           padding: '10px 16px',
           fontSize: 14,
-          cursor: 'pointer',
+          cursor: shareLink ? 'pointer' : 'not-allowed',
         }}
       >
         Copy link
@@ -369,9 +381,16 @@ export function ActivatedBriefStatusView({
   const [statusAreaState, setStatusAreaState] =
     React.useState<StatusAreaState>(defaultStatusAreaState);
 
-  const shareLink = `https://brieflink.app/brief/${draft.id}`;
+  const { appOrigin } = getRuntimeConfig();
+  const sharePath = `/brief/${draft.id}`;
+  const shareLink = appOrigin ? `${appOrigin}${sharePath}` : null;
 
   const handleCopyLink = async () => {
+    if (!shareLink) {
+      setCopied(false);
+      return;
+    }
+
     const clipboard = globalThis.navigator?.clipboard;
 
     if (!clipboard) {
@@ -461,10 +480,18 @@ export function ActivatedBriefStatusView({
         </div>
 
         <SurfaceCard title="Post-share controls">
-          <ShareLinkPanel shareLink={shareLink} copied={copied} onCopyLink={handleCopyLink} />
+          <ShareLinkPanel
+            shareLink={shareLink}
+            sharePath={sharePath}
+            copied={copied}
+            onCopyLink={handleCopyLink}
+          />
         </SurfaceCard>
 
-        <StatusArea state={statusAreaState} onRetry={() => setStatusAreaState(retryStatusAreaState)} />
+        <StatusArea
+          state={statusAreaState}
+          onRetry={() => setStatusAreaState(retryStatusAreaState)}
+        />
       </div>
     </main>
   );
